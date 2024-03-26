@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+             x:Class="MauiScanner.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25">
+           <!-- <Image
+                Source="dotnet_bot.png"
+                HeightRequest="185"
+                Aspect="AspectFit"
+                SemanticProperties.Description="dot net bot in a race car number eight" />-->
+            <cv:CameraView x:Name="cameraView" WidthRequest="300" HeightRequest="300" CamerasLoaded="cameraView_CamerasLoaded" BarCodeDetectionEnabled="True" BarcodeDetected="cameraView_BarcodeDetected"/>
+            <Button Text="DATABÁZE" Clicked="DatabaseButton_Clicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
