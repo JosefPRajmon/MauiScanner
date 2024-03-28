@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MauiScanner.Login
@@ -18,6 +19,20 @@ namespace MauiScanner.Login
         {
             _connection = new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, DB_NAME));
             _connection.CreateTableAsync<UserClass>().Wait();
+        }
+        
+        public async Task<loginResponse> Login(string username, string password)
+        {
+           
+            return  JsonSerializer.Deserialize<loginResponse>(
+                 await Task.Run(async () =>
+                 {
+                     HttpClient client = new HttpClient();
+                     HttpResponseMessage response = await client.GetAsync("https://www.as4u.cz/mobile/json.php?akce=login&name=" + username + "&pass=" + password);
+                     string responseS = await response.Content.ReadAsStringAsync();
+                     return responseS;
+                 })
+                );
         }
 
         public string GetUserID()

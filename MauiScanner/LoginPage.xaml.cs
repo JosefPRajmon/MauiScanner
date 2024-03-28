@@ -17,10 +17,8 @@ public partial class LoginPage : ContentPage
 
     private async void log_Clicked(object sender, EventArgs e)
     {
-        HttpClient client = new HttpClient();
-        HttpResponseMessage response = await client.GetAsync("https://www.as4u.cz/mobile/json.php?akce=login&name="+ username.Text+"&pass="+ password.Text);
-        string responseS = await response.Content.ReadAsStringAsync();
-        loginResponse responseO = JsonSerializer.Deserialize<loginResponse>(responseS);
+
+        loginResponse responseO = await _loginClass.Login(username.Text,password.Text);
         try
         {
             if (responseO.securid.ValueKind == JsonValueKind.String)
