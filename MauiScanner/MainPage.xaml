@@ -14,7 +14,9 @@
                 Aspect="AspectFit"
                 SemanticProperties.Description="dot net bot in a race car number eight" />-->
             <cv:CameraView x:Name="cameraView" WidthRequest="300" HeightRequest="300" CamerasLoaded="cameraView_CamerasLoaded" BarCodeDetectionEnabled="True" BarcodeDetected="cameraView_BarcodeDetected"/>
+
             <Button Text="DATABÁZE" Clicked="DatabaseButton_Clicked"/>
+            <Label x:Name="test"/>
 
         </VerticalStackLayout>
     </ScrollView>
