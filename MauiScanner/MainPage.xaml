@@ -5,19 +5,64 @@
              x:Class="MauiScanner.MainPage">
 
     <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-           <!-- <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
+        <VerticalStackLayout BackgroundColor="#e1eef4">
+                <Image
+                Source="bilina_header_cteni.png"
                 Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a race car number eight" />-->
-            <cv:CameraView x:Name="cameraView" WidthRequest="300" HeightRequest="300" CamerasLoaded="cameraView_CamerasLoaded" BarCodeDetectionEnabled="True" BarcodeDetected="cameraView_BarcodeDetected"/>
+                SemanticProperties.Description="logo Bíliny" />
+            <VerticalStackLayout
+            VerticalOptions="FillAndExpand"
+            Padding="30,0"
+            Spacing="0">
+                <cv:CameraView x:Name="cameraView" HeightRequest="100" WidthRequest="400" HorizontalOptions="FillAndExpand" CamerasLoaded="cameraView_CamerasLoaded" BarCodeDetectionEnabled="True" BarcodeDetected="cameraView_BarcodeDetected"/>
+               
+                                <!-- <Button Text="DATABÁZE" Clicked="DatabaseButton_Clicked"/>                        
+                <HorizontalStackLayout HeightRequest="30" HorizontalOptions="Center"  >
+                            <Label Text="Chcete vypočítat cenu po slevě?" VerticalOptions="Center" VerticalTextAlignment="Center"/>
+                            <CheckBox IsEnabled="True" x:Name="usePriceCheckbox" VerticalOptions="Center" CheckedChanged="usePriceCheckbox_CheckedChanged" Color="#006da4"/>
+                        </HorizontalStackLayout>-->
+                <StackLayout x:Name="visiblePlatnost" IsVisible="False" Padding="10">
+                    <!--odkulatit-->
+                    <Border Padding="1" WidthRequest="270" HorizontalOptions="Center" Stroke="#006da4" BackgroundColor="#B3FFFFFF">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="40" />
+                        </Border.StrokeShape>
 
-            <Button Text="DATABÁZE" Clicked="DatabaseButton_Clicked"/>
-            <Label x:Name="test"/>
-
+                <Label x:Name="platnost" TextType="Html" HorizontalTextAlignment="Center"/>
+                    </Border>
+                </StackLayout>
+                <VerticalStackLayout>
+                    <Entry x:Name="entryNum" Placeholder="Cena k odečtení slevy" HorizontalTextAlignment="Center" TextChanged="Vypocet_Ceny" IsVisible="False"/>
+                    <Label x:Name="cena" HorizontalTextAlignment="Center" IsVisible="False"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout x:Name="Kalkulacka" IsVisible="false">
+                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="2" >
+                        <Button WidthRequest="60" Margin="10" Text="7" Clicked="Keyboard_7"/>
+                        <Button WidthRequest="60" Margin="10" Text="8" Clicked="Keyboard_8"/>
+                        <Button WidthRequest="60" Margin="10" Text="9" Clicked="Keyboard_9"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="2" >
+                        <Button WidthRequest="60" Margin="10" Text="4" Clicked="Keyboard_4"/>
+                        <Button WidthRequest="60" Margin="10" Text="5" Clicked="Keyboard_5"/>
+                        <Button WidthRequest="60" Margin="10" Text="6" Clicked="Keyboard_6"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="2">
+                        <Button WidthRequest="60" Margin="10" Text="1" Clicked="Keyboard_1"/>
+                        <Button WidthRequest="60" Margin="10" Text="2" Clicked="Keyboard_2"/>
+                        <Button WidthRequest="60" Margin="10" Text="3" Clicked="Keyboard_3"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="2">
+                        <Button WidthRequest="60" Margin="10" Text="0" Clicked="Keyboard_0"/>
+                        <Button WidthRequest="60" Margin="10" Text="," Clicked="Keyboard_Decimal"/>
+                        <Button WidthRequest="60" Margin="10" Text="←" Clicked="Keyboard_back"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+                <!--zmenčit mezery-->
+                <VerticalStackLayout x:Name="Butt" IsVisible="False">
+                    <Button Text="Uplatnit slevu" Clicked="Use_Sale" BackgroundColor="#006da4" BorderColor="#006da4" Margin="5"/>
+                    <Button Text="Resetovat" Clicked="ResetButton" BackgroundColor="#006da4" BorderColor="#006da4" Margin="5"/>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 

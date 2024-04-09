@@ -11,8 +11,8 @@ namespace MauiScanner.Login
 {
     internal class LoginClass
     {
-        private UserClass _userClass;
-        private const string DB_NAME = "user_db.DB3";
+        public UserClass _userClass;
+        private const string DB_NAME = "user_db_test.DB3";
         private readonly SQLiteAsyncConnection _connection;
 
         public LoginClass()
@@ -20,24 +20,52 @@ namespace MauiScanner.Login
             _connection = new SQLiteAsyncConnection(Path.Combine(FileSystem.AppDataDirectory, DB_NAME));
             _connection.CreateTableAsync<UserClass>().Wait();
         }
-        
-        public async Task<loginResponse> Login(string username, string password)
+
+        public async Task<List<string>> Login(string username, string password)
         {
-           
-            return  JsonSerializer.Deserialize<loginResponse>(
-                 await Task.Run(async () =>
-                 {
-                     HttpClient client = new HttpClient();
-                     HttpResponseMessage response = await client.GetAsync("https://www.as4u.cz/mobile/json.php?akce=login&name=" + username + "&pass=" + password);
-                     string responseS = await response.Content.ReadAsStringAsync();
-                     return responseS;
-                 })
-                );
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+
+            if (accessType == NetworkAccess.Internet)
+                {
+                loginResponse responseO = JsonSerializer.Deserialize<loginResponse>(
+                     await Task.Run(async () =>
+                     {
+                         HttpClient client = new HttpClient();
+                         HttpResponseMessage response = await client.GetAsync("https://www.as4u.cz/mobile/json.php?akce=login&name=" + username + "&pass=" + password);
+                         string responseS = await response.Content.ReadAsStringAsync();
+                         return responseS;
+                     })
+                    );
+                if (responseO.securid.ValueKind == JsonValueKind.String)
+                {
+                    return new List<string>() { responseO.securid.ToString(), "" };
+                }
+                else
+                {
+                    return new List<string>() { "0", responseO.reason };
+                }
+            }
+            else
+            {
+
+                App.Current.Resources.TryGetValue("InternetOut", out object Error);
+                return new List<string>() { "0", (string) Error };
+            }
         }
 
-        public string GetUserID()
+        public async Task<string> GetUserID()
         {
-            return _userClass.id;
+            try
+            {
+                return _userClass.Id;
+
+            }
+            catch (Exception)
+            {
+                _userClass = await GetUser();
+
+                return _userClass.Id;
+            }
         }
 
         public async Task<Boolean> IsLoggedIn()
@@ -62,6 +90,12 @@ namespace MauiScanner.Login
         public async Task Create(UserClass customer)
         {
             await _connection.InsertAsync(customer);
+        }
+        public async Task Update(UserClass customer)
+        {
+            List<UserClass> user = await _connection.Table<UserClass>().ToListAsync();
+            user[0] = customer;
+            await _connection.UpdateAsync(customer);
         }
         public string CreateMD5(string input)
         {

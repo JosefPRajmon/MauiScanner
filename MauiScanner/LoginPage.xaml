@@ -3,10 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiScanner.LoginPage"
              Title="LoginPage">
-    <VerticalStackLayout>
-        <Entry x:Name="username" Placeholder="Uživatelské jméno"/>
-        <Entry x:Name="password" Placeholder="Heslo" IsPassword="True"/>
-        <Button x:Name="log" Text="Přihlásit" Clicked="log_Clicked"/>
-        <Label x:Name="test"/>
+    <VerticalStackLayout BackgroundColor="#e1eef4">
+        <Image
+                Source="bilina_header_cteni.png"
+                Aspect="AspectFit"
+                SemanticProperties.Description="logo Bíliny" />
+        <VerticalStackLayout
+            VerticalOptions="FillAndExpand"
+            Padding="30,30"
+            Spacing="25">
+            <Entry x:Name="username" Placeholder="Uživatelské jméno"/>
+            <Entry x:Name="password" Placeholder="Heslo" IsPassword="True"/>
+            <Button x:Name="log" Text="Přihlásit" Clicked="log_Clicked"  BackgroundColor="#006da4" BorderColor="#006da4"/>
+            <Label x:Name="test" TextColor="Red"/>
+        </VerticalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

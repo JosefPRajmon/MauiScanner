@@ -18,21 +18,21 @@ public partial class LoginPage : ContentPage
     private async void log_Clicked(object sender, EventArgs e)
     {
 
-        loginResponse responseO = await _loginClass.Login(username.Text,password.Text);
+        List<string> responseO = await _loginClass.Login(username.Text,password.Text);
         try
         {
-            if (responseO.securid.ValueKind == JsonValueKind.String)
+            if (responseO[0] !="0")
             {
                 UserClass user = new UserClass();
-                user.id = responseO.securid.ToString();
+                user.Id = responseO[0];
                 user.UserName = username.Text;
                 user.Password = _loginClass.CreateMD5(password.Text);
-                _loginClass.Create(user);
-                Navigation.PopModalAsync();
+                await _loginClass.Create(user);
+                await Navigation.PopModalAsync();
             }
             else
             {
-                test.Text = responseO.reason;
+                test.Text = responseO[1];
             }
         }
         catch (Exception)
