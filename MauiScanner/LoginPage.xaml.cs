@@ -11,7 +11,12 @@ public partial class LoginPage : ContentPage
     public LoginPage()
 	{
 		InitializeComponent();
-
+        Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("MyCustomization", (handler, view) =>
+        {
+#if ANDROID
+            handler.PlatformView.ShowSoftInputOnFocus = true;
+#endif
+        });
         _loginClass = new LoginClass();
     }
 

@@ -100,12 +100,14 @@ namespace MauiScanner
                         visiblePlatnost.IsVisible = true;
                         if (scannedResponseClass.status == "OK")
                         {
-                            platnost.TextColor = Colors.Green;
+                            platnost.TextColor = Color.FromHex("#B3FFFFFF");
+                            backgraundPlatnost.BackgroundColor = Colors.Green;
                             platnost.Text = $"Držitel: <b>{scannedResponseClass.drzitel}</b><br>{scannedResponseClass.infotext}";
                         }
                         else
                         {
-                            platnost.TextColor = Colors.Red;
+                            platnost.TextColor = Colors.Black;
+                            backgraundPlatnost.BackgroundColor= Colors.Red;
                         }
                         if (scannedResponseClass.status == "error")
                         {
@@ -205,11 +207,18 @@ namespace MauiScanner
             entryNum.IsVisible = false;
             cena.IsVisible = false;
             platnost.Text = result.infotext;
-            platnost.TextColor = Colors.Black;
+            platnost.TextColor = Color.FromHex("#B3FFFFFF");
+            backgraundPlatnost.BackgroundColor = Colors.Black;
         }
-        private string FormaterEntery(string entery,int add)
+        private string FormaterEntery(string entery,int add, Button button)
         {
             HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+            button.BackgroundColor = Color.FromHex("#006da4");
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Task.Delay(500);
+                button.BackgroundColor = Colors.Gray;
+            });
             string addS = $"{add}";
             if (add == -1) {
                 addS = "";
@@ -255,64 +264,78 @@ namespace MauiScanner
         {
 
             //double a = double.Parse($"{entryNum.Text}0");
-            entryNum.Text = FormaterEntery(entryNum.Text, 0); //$"{a:C}".Split("K")[0];
+            entryNum.Text = FormaterEntery(entryNum.Text, 0,(Button)sender); //$"{a:C}".Split("K")[0];
         }
 
         private void Keyboard_1(object sender, EventArgs e)
         {
-            entryNum.Text = FormaterEntery(entryNum.Text, 1);//entryNum.Text + "1";
+            entryNum.Text = FormaterEntery(entryNum.Text, 1, (Button)sender);//entryNum.Text + "1";
+
         }
 
         private void Keyboard_2(object sender, EventArgs e)
         {
-            entryNum.Text = FormaterEntery(entryNum.Text, 2);//entryNum.Text + "2";
+            entryNum.Text = FormaterEntery(entryNum.Text, 2, (Button)sender);//entryNum.Text + "2";
         }
 
         private void Keyboard_3(object sender, EventArgs e)
         {
-            entryNum.Text = FormaterEntery(entryNum.Text, 3);//entryNum.Text + "3";
+            entryNum.Text = FormaterEntery(entryNum.Text, 3, (Button)sender);//entryNum.Text + "3";
         }
 
         private void Keyboard_4(object sender, EventArgs e)
         {
-            entryNum.Text = FormaterEntery(entryNum.Text, 4);//entryNum.Text + "4";
+            entryNum.Text = FormaterEntery(entryNum.Text, 4, (Button)sender);//entryNum.Text + "4";
         }
 
         private void Keyboard_5(object sender, EventArgs e)
         {
-            entryNum.Text = FormaterEntery(entryNum.Text, 5);//entryNum.Text + "5";
+            entryNum.Text = FormaterEntery(entryNum.Text, 5, (Button)sender);//entryNum.Text + "5";
         }
 
         private void Keyboard_6(object sender, EventArgs e)
         {
-            entryNum.Text = FormaterEntery(entryNum.Text, 6);//entryNum.Text + "6";
+            entryNum.Text = FormaterEntery(entryNum.Text, 6, (Button)sender);//entryNum.Text + "6";
         }
 
         private void Keyboard_7(object sender, EventArgs e)
         {
-            entryNum.Text = FormaterEntery(entryNum.Text, 7);//entryNum.Text + "7";
+            entryNum.Text = FormaterEntery(entryNum.Text, 7, (Button)sender);//entryNum.Text + "7";
         }
 
         private void Keyboard_8(object sender, EventArgs e)
         {
-            entryNum.Text = FormaterEntery(entryNum.Text, 8);//entryNum.Text + "8";
+            entryNum.Text = FormaterEntery(entryNum.Text, 8, (Button)sender);//entryNum.Text + "8";
         }
 
         private void Keyboard_9(object sender, EventArgs e)
         {
-            entryNum.Text = FormaterEntery(entryNum.Text, 9);//entryNum.Text + "9";
+            entryNum.Text = FormaterEntery(entryNum.Text, 9, (Button)sender);//entryNum.Text + "9";
 
         }
-
+        public bool backClicked=false;
         private void Keyboard_back(object sender, EventArgs e)
         {
-
-            HapticFeedback.Default.Perform(HapticFeedbackType.Click);
-            entryNum.Text = entryNum.Text.Length > 0 ? entryNum.Text.Substring(0, entryNum.Text.Length - 1) : string.Empty;
-            if (!entryNum.Text.Contains(","))
+            if (!backClicked)
             {
-                SetDecemal = false;
+                backClicked = true;
+                 HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+                entryNum.Text = entryNum.Text.Length > 0 ? entryNum.Text.Substring(0, entryNum.Text.Length - 1) : string.Empty;
+                if (!entryNum.Text.Contains(","))
+                {
+                    SetDecemal = false;
+                }
+                Button button = (Button)sender;
+                button.BackgroundColor = Color.FromHex("#006da4");
+                MainThread.BeginInvokeOnMainThread(async() =>
+                {
+                    await Task.Delay(500);
+                    button.BackgroundColor = Colors.Gray;
+                });
+                backClicked = false;
             }
+
+            
 
         }
 
@@ -330,6 +353,13 @@ namespace MauiScanner
                 entryNum.Text += symbol;
                 SetDecemal = true;
             }
+            Button button = (Button)sender;
+            button.BackgroundColor = Color.FromHex("#006da4");
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Task.Delay(500);
+                button.BackgroundColor = Colors.Gray;
+            });
         }
 
         private void KeyboardTausend()
