@@ -41,47 +41,39 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
 	  <ApplicationTitle>Městká karta Bílina Scaner</ApplicationTitle>
-	  <ApplicationId>cz.as4u.Bilina_mestka_karta_scanner</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 	  <ApplicationTitle>Městká karta Bílina Scaner</ApplicationTitle>
-	  <ApplicationId>cz.as4u.Bilina_mestka_karta_scanner</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Městká karta Bílina Scaner</ApplicationTitle>
-	  <ApplicationId>cz.as4u.Bilina_mestka_karta_scanner</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationTitle>Městká karta Bílina Scaner</ApplicationTitle>
-	  <ApplicationId>cz.as4u.Bilina_mestka_karta_scanner</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
 	  <ApplicationTitle>Městká karta Bílina Scaner</ApplicationTitle>
-	  <ApplicationId>cz.as4u.Bilina_mestka_karta_scanner</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 	  <ApplicationTitle>Městká karta Bílina Scaner</ApplicationTitle>
-	  <ApplicationId>cz.as4u.Bilina_mestka_karta_scanner</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Městká karta Bílina Scaner</ApplicationTitle>
-	  <ApplicationId>cz.as4u.Bilina_mestka_karta_scanner</ApplicationId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationTitle>Městká karta Bílina Scaner</ApplicationTitle>
-	  <ApplicationId>cz.as4u.Bilina_mestka_karta_scanner</ApplicationId>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#0077B4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#0077B4"/>
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#0077B4" BaseSize="128,128" />

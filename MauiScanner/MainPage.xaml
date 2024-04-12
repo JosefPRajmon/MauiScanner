@@ -31,11 +31,16 @@
                 <Label x:Name="platnost" TextType="Html" HorizontalTextAlignment="Center" Margin="10"/>
                     </Border>
                 </StackLayout>
-                <VerticalStackLayout Margin="5">
-                    <Entry x:Name="entryNum" Placeholder="Cena k odečtení slevy" HorizontalTextAlignment="Center" TextChanged="Vypocet_Ceny" IsVisible="False"/>
-                    <Label x:Name="cena" HorizontalTextAlignment="Center" IsVisible="False"/>
-                </VerticalStackLayout>
                 <VerticalStackLayout x:Name="Kalkulacka" IsVisible="false">
+                <VerticalStackLayout Margin="5">
+                        <Grid  ColumnDefinitions="*,*" RowDefinitions="20,20">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Cena před slevou: " WidthRequest="140" HorizontalTextAlignment="End"/>
+                            <Label Grid.Row="0" Grid.Column="1" x:Name="entryNum"  HorizontalTextAlignment="Start"  IsVisible="False"/>
+
+                            <Label  Grid.Row="1" Grid.Column="0" Text="Cena po slevě: " WidthRequest="140" HorizontalTextAlignment="End"/>
+                            <Label  Grid.Row="1" Grid.Column="1" x:Name="cena" HorizontalTextAlignment="Start" IsVisible="False" TextColor="#006c00" FontAttributes="Bold"/>
+                    </Grid>
+                </VerticalStackLayout>
                     <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0" >
                         <Button WidthRequest="60" Margin="5" Text="7" Clicked="Keyboard_7" BackgroundColor="gray"/>
                         <Button WidthRequest="60" Margin="5" Text="8" Clicked="Keyboard_8" BackgroundColor="gray"/>

@@ -13,6 +13,7 @@ namespace MauiScanner
         private ScannedResponseClass scannedResponseClass;
         private string cardId;
         private bool SetDecemal= false;
+        private int buttonTimer = 100;
 
         public MainPage(LocalDbService dbService)
         {
@@ -24,6 +25,11 @@ namespace MauiScanner
         handler.PlatformView.ShowSoftInputOnFocus=false;
 #endif
             });
+            TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
+            tapGestureRecognizer.Tapped += async(s, e) => {
+                await Clipboard.Default.SetTextAsync(cardId); ;
+            };
+            platnost.GestureRecognizers.Add(tapGestureRecognizer);
             _loginClass = new LoginClass();
             Task.Run(async () =>
             {
@@ -92,64 +98,67 @@ namespace MauiScanner
                         Vibration.Default.Vibrate(vibrationLength);
                     });
                     MainThread.BeginInvokeOnMainThread(async () =>
-                {
-                    try
-                    {
-                        cardId = args.Result[0].Text;
-                             scannedResponseClass = await onlineCheckClass.CheckSale(await _loginClass.GetUserID(), cardId);
-                        visiblePlatnost.IsVisible = true;
-                        if (scannedResponseClass.status == "OK")
-                        {
-                            platnost.TextColor = Color.FromHex("#B3FFFFFF");
-                            backgraundPlatnost.BackgroundColor = Colors.Green;
-                            platnost.Text = $"Držitel: <b>{scannedResponseClass.drzitel}</b><br>{scannedResponseClass.infotext}";
-                        }
-                        else
-                        {
-                            platnost.TextColor = Colors.Black;
-                            backgraundPlatnost.BackgroundColor= Colors.Red;
-                        }
-                        if (scannedResponseClass.status == "error")
-                        {
-                            Butt.IsVisible = false;
-                            entryNum.IsVisible = false;
-                            cena.IsVisible = false;
-                            Kalkulacka.IsVisible = false;
-                            platnost.Text = $"{scannedResponseClass.infotext}";
-                        }
-                        else
-                        {
-                            Butt.IsVisible = true;
-                            entryNum.IsVisible= true;
-                            cena.IsVisible = true;
-                            Kalkulacka.IsVisible = true;
-                            cena.Text = string.Empty;
-                            entryNum.Text = string.Empty;
-                        }
+                     {
                         try
                         {
-                            await cameraView.StopCameraAsync();
+                            cardId = args.Result[0].Text;
+                            cardId = cardId.Substring(0, 12).TrimStart('0');
 
+                            scannedResponseClass = await onlineCheckClass.CheckSale(await _loginClass.GetUserID(), cardId);
+                            visiblePlatnost.IsVisible = true;
+                            if (scannedResponseClass.status == "OK")
+                            {
+                                platnost.TextColor = Color.FromHex("#B3FFFFFF");
+                                backgraundPlatnost.BackgroundColor = Colors.Green;
+                                platnost.Text = $"Držitel: <b>{scannedResponseClass.drzitel}</b><br>{scannedResponseClass.infotext}";
+                            }
+                            else
+                            {
+                                platnost.TextColor = Colors.Black;
+                                backgraundPlatnost.BackgroundColor= Colors.Red;
+                            }
+                            if (scannedResponseClass.status == "error")
+                            {
+                                Butt.IsVisible = false;
+                                entryNum.IsVisible = false;
+                                cena.IsVisible = false;
+                                Kalkulacka.IsVisible = false;
+                                platnost.Text = $"{scannedResponseClass.infotext}<br>{cardId}";
+                            }
+                            else
+                            {
+                                Butt.IsVisible = true;
+                                entryNum.IsVisible= true;
+                                cena.IsVisible = true;
+                                Kalkulacka.IsVisible = true;
+                                cena.Text = string.Empty;
+                                entryNum.Text = string.Empty;
+                            }
+                            try
+                            {
+                                await cameraView.StopCameraAsync();
+
+                                }
+                                catch (Exception)
+                                {
+                                }
+                            try
+                            {
+
+                            await cameraView.StartCameraAsync(); 
                             }
                             catch (Exception)
                             {
+
                             }
-                        try
+                            await Task.Delay(1000); // Prodleva 1 sekundu
+                            open = false;
+                            }
+                        catch (Exception e)
                         {
-
-                        await cameraView.StartCameraAsync(); 
+                        
                         }
-                        catch (Exception)
-                        {
-
-                        }
-                        await Task.Delay(1000); // Prodleva 1 sekundu
-                        open = false;
-                        }
-                    catch (Exception e)
-                    {
-                    }
-                }); 
+                    }); 
             }
             }
             catch (Exception)
@@ -182,7 +191,7 @@ namespace MauiScanner
             }
         }*/
 
-        private void Vypocet_Ceny(object sender, TextChangedEventArgs e)
+        private void Vypocet_Ceny()
         {
             try
             {
@@ -206,9 +215,10 @@ namespace MauiScanner
             entryNum.Text = string.Empty;
             entryNum.IsVisible = false;
             cena.IsVisible = false;
+            Kalkulacka.IsVisible = false;
             platnost.Text = result.infotext;
             platnost.TextColor = Color.FromHex("#B3FFFFFF");
-            backgraundPlatnost.BackgroundColor = Colors.Black;
+            backgraundPlatnost.BackgroundColor = Color.FromHex("#006da4");
         }
         private string FormaterEntery(string entery,int add, Button button)
         {
@@ -216,7 +226,7 @@ namespace MauiScanner
             button.BackgroundColor = Color.FromHex("#006da4");
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Task.Delay(500);
+                await Task.Delay(buttonTimer);
                 button.BackgroundColor = Colors.Gray;
             });
             string addS = $"{add}";
@@ -265,52 +275,61 @@ namespace MauiScanner
 
             //double a = double.Parse($"{entryNum.Text}0");
             entryNum.Text = FormaterEntery(entryNum.Text, 0,(Button)sender); //$"{a:C}".Split("K")[0];
+            Vypocet_Ceny();
         }
 
         private void Keyboard_1(object sender, EventArgs e)
         {
             entryNum.Text = FormaterEntery(entryNum.Text, 1, (Button)sender);//entryNum.Text + "1";
-
+            Vypocet_Ceny();
         }
 
         private void Keyboard_2(object sender, EventArgs e)
         {
             entryNum.Text = FormaterEntery(entryNum.Text, 2, (Button)sender);//entryNum.Text + "2";
+            Vypocet_Ceny();
         }
 
         private void Keyboard_3(object sender, EventArgs e)
         {
             entryNum.Text = FormaterEntery(entryNum.Text, 3, (Button)sender);//entryNum.Text + "3";
+            Vypocet_Ceny();
         }
 
         private void Keyboard_4(object sender, EventArgs e)
         {
             entryNum.Text = FormaterEntery(entryNum.Text, 4, (Button)sender);//entryNum.Text + "4";
+            Vypocet_Ceny();
         }
 
         private void Keyboard_5(object sender, EventArgs e)
         {
             entryNum.Text = FormaterEntery(entryNum.Text, 5, (Button)sender);//entryNum.Text + "5";
+            Vypocet_Ceny();
         }
 
         private void Keyboard_6(object sender, EventArgs e)
         {
             entryNum.Text = FormaterEntery(entryNum.Text, 6, (Button)sender);//entryNum.Text + "6";
+            Vypocet_Ceny();
         }
 
         private void Keyboard_7(object sender, EventArgs e)
         {
             entryNum.Text = FormaterEntery(entryNum.Text, 7, (Button)sender);//entryNum.Text + "7";
+            Vypocet_Ceny();
         }
 
         private void Keyboard_8(object sender, EventArgs e)
         {
             entryNum.Text = FormaterEntery(entryNum.Text, 8, (Button)sender);//entryNum.Text + "8";
+            Vypocet_Ceny();
         }
 
         private void Keyboard_9(object sender, EventArgs e)
         {
             entryNum.Text = FormaterEntery(entryNum.Text, 9, (Button)sender);//entryNum.Text + "9";
+            Vypocet_Ceny();
 
         }
         public bool backClicked=false;
@@ -329,9 +348,10 @@ namespace MauiScanner
                 button.BackgroundColor = Color.FromHex("#006da4");
                 MainThread.BeginInvokeOnMainThread(async() =>
                 {
-                    await Task.Delay(500);
+                    await Task.Delay(buttonTimer);
                     button.BackgroundColor = Colors.Gray;
                 });
+                Vypocet_Ceny();
                 backClicked = false;
             }
 
@@ -357,9 +377,10 @@ namespace MauiScanner
             button.BackgroundColor = Color.FromHex("#006da4");
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Task.Delay(500);
+                await Task.Delay(buttonTimer);
                 button.BackgroundColor = Colors.Gray;
             });
+            Vypocet_Ceny();
         }
 
         private void KeyboardTausend()

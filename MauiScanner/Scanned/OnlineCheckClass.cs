@@ -19,9 +19,6 @@ namespace MauiScanner.Scanned
 
             if (accessType == NetworkAccess.Internet)
                 {
-                int a = cardNumber.Length;
-                cardNumber = cardNumber.Substring(0,12);
-                cardNumber = cardNumber.TrimStart('0');
                 try
                 {
                     string url = $"http://test.as4u.local/redakce/json.php?akce=sale&subakce={subakce}&xuser={userID}&card_numberFind={cardNumber}";

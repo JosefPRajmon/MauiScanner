@@ -5,7 +5,7 @@
              Title="LoginPage">
     <VerticalStackLayout BackgroundColor="#e1eef4">
         <Image
-                Source="bilina_header_cteni.png"
+                Source="bilina_header_cteni_sm.png"
                 Aspect="AspectFit"
                 SemanticProperties.Description="logo Bíliny" />
         <VerticalStackLayout
