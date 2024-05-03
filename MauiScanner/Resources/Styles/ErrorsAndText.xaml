@@ -7,4 +7,12 @@
     <x:String x:Key="InternetOut">Není připojení k internetu. Prosíme zkontrolujte ho.</x:String>
     <x:String x:Key="ServerOut">Nepovedlo se připojit k serveru.</x:String>
     <x:String x:Key="ServerDisconect">Selhala komunikace se serverem.</x:String>
+    <x:String x:Key="ZeroSale">Pokud chcete uplatnit slevu tak jí vyberte.</x:String>
+    <x:String x:Key="CartInfoOkFormated">Id karty: {0} 
+Držitel: {1}
+narozen/a roku: {2}</x:String>
+    <x:String x:Key="CartInfoErrorFormated">{0}
+ Id karty: {1}
+    </x:String>
+    <x:String x:Key="LoginFail">Nepovedlo se přihlásit</x:String>
 </ResourceDictionary>

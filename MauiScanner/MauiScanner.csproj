@@ -100,6 +100,8 @@
 	<ItemGroup>
 	  <None Remove="Resources\Images\bilina_header_cteni.png" />
 	  <None Remove="Resources\Images\bilina_header_cteni_sm.png" />
+	  <None Remove="Resources\Images\decimal_icon.png" />
+	  <None Remove="Resources\Images\send_icon.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -113,12 +115,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="DatabasePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="LoginPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\ErrorsAndText.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -127,5 +123,7 @@
 	<ItemGroup>
 	  <Folder Include="CustomEntity\" />
 	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionMauiScannerHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>

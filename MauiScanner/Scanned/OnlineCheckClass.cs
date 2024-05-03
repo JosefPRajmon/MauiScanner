@@ -13,7 +13,7 @@ namespace MauiScanner.Scanned
 
         public OnlineCheckClass() { }
 
-        private async Task<ScannedResponseClass> Caller(string subakce, string userID,string cardNumber,string price = "0")
+        private async Task<HttpResponseMessage> Caller(string subakce, string userID,string cardNumber,string usedSale = "-1")
         {
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
 
@@ -21,22 +21,22 @@ namespace MauiScanner.Scanned
                 {
                 try
                 {
-                    string url = $"http://test.as4u.local/redakce/json.php?akce=sale&subakce={subakce}&xuser={userID}&card_numberFind={cardNumber}";
-                    if (price != "0")
+                    string url = $"https://karta-bilina.as4u.cz/redakce/json.php?akce=sale&subakce={subakce}&xuser={userID}&card_numberFind={cardNumber}";
+                    if (usedSale != "-1")
                     {
-                        url += $"&price={price}";
+                        url += $"&salesUsed={usedSale}";
                     }
-                    string json = await Task.Run(async () =>
+                    return await Task.Run(async () =>
                     {
                         HttpClientHandler handler = new HttpClientHandler();
                         handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
                         HttpClient client = new HttpClient(handler);
                         HttpResponseMessage response = await client.GetAsync(url);
-                        string responseS = await response.Content.ReadAsStringAsync();
-                        return responseS;
+                        //string responseS = await response.Content.ReadAsStringAsync();
+                        return response;
                     });
-                    ScannedResponseClass responseO = new ScannedResponseClass();
-                    if (json.Contains("status"))
+                    //ScannedResponseClass responseO = new ScannedResponseClass();
+                    /*if (json.Contains("status"))
                     {
                         try
                         {
@@ -89,20 +89,20 @@ namespace MauiScanner.Scanned
                         responseO.status = "error";
                         responseO.infotext = (string)Error;
                     }
-                    return responseO;
+                    return responseO;*/
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
 
                     App.Current.Resources.TryGetValue("ServerOut", out object Error);
                     string retuntText = (string)Error;
-                    return new ScannedResponseClass() { status="error",infotext = retuntText };
+                    return new HttpResponseMessage() { Content= new StringContent($"{{\"status\":\"error\",\"infotext\":\"{retuntText}\",\"errorNo\":1}}", Encoding.UTF8, "application/json")};//new ScannedResponseClass() { status="error",infotext = retuntText };
                 }
             }
             else
             {
                 App.Current.Resources.TryGetValue("InternetOut", out object Error);
-                return new ScannedResponseClass() { status = "error", infotext = (string) Error };
+                return new HttpResponseMessage() { Content = new StringContent($"{{\"status\":\"error\",\"infotext\":\"{Error}\",\"errorNo\":1}}", Encoding.UTF8, "application/json") };
             }
         }
         private string GetStringFromURL(string json, string key, out int endIndex, string Lastkey = ",")
@@ -134,15 +134,13 @@ namespace MauiScanner.Scanned
                 return "";
             }
         }
-        public async Task<ScannedResponseClass> CheckSale(string userID, string cardNumber, string price = "0")
+        public async Task<HttpResponseMessage> CheckSale(string userID, string cardNumber)
         {
-            ScannedResponseClass scannedResponseClass = await Caller("sale_basic_test", userID, cardNumber,price);
-            return scannedResponseClass;
+            return  await Caller("sale_basic_test", userID, cardNumber);
         }
-        public async Task<ScannedResponseClass> UseSale(string userID, string cardNumber)
+        public async Task<HttpResponseMessage> UseSale(string userID, string cardNumber,string usedSales)
         {
-            ScannedResponseClass scannedResponseClass = await Caller("sale_basic_write", userID, cardNumber);
-            return scannedResponseClass;
+            return await Caller("sale_basic_write", userID, cardNumber,usedSales);
         }
     }
 }

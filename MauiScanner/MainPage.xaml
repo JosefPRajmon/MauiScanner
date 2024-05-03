@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+             xmlns:local="clr-namespace:MauiScanner"
              x:Class="MauiScanner.MainPage">
 
     <ScrollView>
@@ -10,64 +11,104 @@
                 Source="bilina_header_cteni_sm.png"
                 Aspect="AspectFit"
                 SemanticProperties.Description="logo Bíliny" />
-            <VerticalStackLayout
+            <StackLayout
             VerticalOptions="FillAndExpand"
             Padding="30,30"
             Spacing="0">
                 <cv:CameraView x:Name="cameraView" HeightRequest="100" WidthRequest="400" HorizontalOptions="FillAndExpand" CamerasLoaded="cameraView_CamerasLoaded" BarCodeDetectionEnabled="True" BarcodeDetected="cameraView_BarcodeDetected"/>
-               
-                                <!-- <Button Text="DATABÁZE" Clicked="DatabaseButton_Clicked"/>                        
-                <HorizontalStackLayout HeightRequest="30" HorizontalOptions="Center"  >
-                            <Label Text="Chcete vypočítat cenu po slevě?" VerticalOptions="Center" VerticalTextAlignment="Center"/>
-                            <CheckBox IsEnabled="True" x:Name="usePriceCheckbox" VerticalOptions="Center" CheckedChanged="usePriceCheckbox_CheckedChanged" Color="#006da4"/>
-                        </HorizontalStackLayout>-->
                 <StackLayout x:Name="visiblePlatnost" IsVisible="False" Padding="10">
-                    <!--odkulatit-->
                     <Border Padding="1" x:Name="backgraundPlatnost" WidthRequest="300" HorizontalOptions="CenterAndExpand"  BackgroundColor="#B3FFFFFF" StrokeThickness="0">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="8" />
                         </Border.StrokeShape>
 
-                <Label x:Name="platnost" TextType="Html" HorizontalTextAlignment="Center" Margin="10"/>
+                        <Label x:Name="cartInfo" TextType="Text" HorizontalTextAlignment="Center" Margin="10"  FontFamily="OpenSans-Bold"/>
                     </Border>
                 </StackLayout>
-                <VerticalStackLayout x:Name="Kalkulacka" IsVisible="false">
-                <VerticalStackLayout Margin="5">
+                <CollectionView x:Name="ColectionViewSales" SelectionMode="Multiple" SelectionChanged="ColectionViewSales_SelectionChanged"> 
+                    <CollectionView.Resources>
+                        <ResourceDictionary>
+                            <local:StatusToColorConverter x:Key="StatusToColorConverter"/>
+                            <local:StatusToColorConverterClicked x:Key="StatusToColorConverterClicked"/>
+                            <local:StatusToColorConverterClickedText x:Key="StatusToColorConverterClickedText"/>
+                        </ResourceDictionary>
+                    </CollectionView.Resources>
+
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="10" Margin="3" BorderColor="Transparent" InputTransparent="True" BackgroundColor="{Binding Status, Converter={StaticResource StatusToColorConverter}}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="{Binding Status, Converter={StaticResource StatusToColorConverterClicked}}" />
+                                                <Setter TargetName="NameLabel" Property="Label.TextColor" Value="{Binding Status, Converter={StaticResource StatusToColorConverterClickedText}}"/>
+                                                <Setter TargetName="InfoLabel" Property="Label.TextColor" Value="{Binding Status, Converter={StaticResource StatusToColorConverterClickedText}}"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <StackLayout InputTransparent="True">
+                                    <Label Text="{Binding SaleName}" Style="{StaticResource LabelBolt}" x:Name="NameLabel"/>
+                                    <Label Text="{Binding InfoText}" x:Name="InfoLabel"/>
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+
+                </CollectionView>
+                <VerticalStackLayout x:Name="Kalkulacka" IsVisible="True">
+                    <VerticalStackLayout Margin="5" x:Name="cenaKalkulacka" IsVisible="False">
                         <Grid  ColumnDefinitions="*,*" RowDefinitions="20,20">
-                        <Label Grid.Row="0" Grid.Column="0" Text="Cena před slevou: " WidthRequest="140" HorizontalTextAlignment="End"/>
+                            <Label Grid.Row="0" Grid.Column="0" Text="Cena před slevou: " WidthRequest="140" HorizontalTextAlignment="End"/>
                             <Label Grid.Row="0" Grid.Column="1" x:Name="entryNum"  HorizontalTextAlignment="Start"  IsVisible="False"/>
 
                             <Label  Grid.Row="1" Grid.Column="0" Text="Cena po slevě: " WidthRequest="140" HorizontalTextAlignment="End"/>
                             <Label  Grid.Row="1" Grid.Column="1" x:Name="cena" HorizontalTextAlignment="Start" IsVisible="False" TextColor="#006c00" FontAttributes="Bold"/>
-                    </Grid>
-                </VerticalStackLayout>
-                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0" >
-                        <Button WidthRequest="60" Margin="5" Text="7" Clicked="Keyboard_7" BackgroundColor="gray"/>
-                        <Button WidthRequest="60" Margin="5" Text="8" Clicked="Keyboard_8" BackgroundColor="gray"/>
-                        <Button WidthRequest="60" Margin="5" Text="9" Clicked="Keyboard_9" BackgroundColor="gray"/>
-                    </HorizontalStackLayout>
-                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0" >
-                        <Button WidthRequest="60" Margin="5" Text="4" Clicked="Keyboard_4" BackgroundColor="gray"/>
-                        <Button WidthRequest="60" Margin="5" Text="5" Clicked="Keyboard_5" BackgroundColor="gray"/>
-                        <Button WidthRequest="60" Margin="5" Text="6" Clicked="Keyboard_6" BackgroundColor="gray"/>
-                    </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="IdCardLayour">
+                        <Grid  ColumnDefinitions="*,*" RowDefinitions="20">
+                            <Label Text="Zadat kod ručně: " Grid.Column="0"/>
+                            <Label x:Name="idCardEntry" Text="" Grid.Column="1"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                    
                     <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0">
                         <Button WidthRequest="60" Margin="5" Text="1" Clicked="Keyboard_1" BackgroundColor="gray"/>
                         <Button WidthRequest="60" Margin="5" Text="2" Clicked="Keyboard_2" BackgroundColor="gray"/>
                         <Button WidthRequest="60" Margin="5" Text="3" Clicked="Keyboard_3" BackgroundColor="gray"/>
                     </HorizontalStackLayout>
+                    
+                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0" >
+                        <Button WidthRequest="60" Margin="5" Text="4" Clicked="Keyboard_4" BackgroundColor="gray"/>
+                        <Button WidthRequest="60" Margin="5" Text="5" Clicked="Keyboard_5" BackgroundColor="gray"/>
+                        <Button WidthRequest="60" Margin="5" Text="6" Clicked="Keyboard_6" BackgroundColor="gray"/>
+                    </HorizontalStackLayout>
+                    
+                    <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0" >
+                        <Button WidthRequest="60" Margin="5" Text="7" Clicked="Keyboard_7" BackgroundColor="gray"/>
+                        <Button WidthRequest="60" Margin="5" Text="8" Clicked="Keyboard_8" BackgroundColor="gray"/>
+                        <Button WidthRequest="60" Margin="5" Text="9" Clicked="Keyboard_9" BackgroundColor="gray"/>
+                    </HorizontalStackLayout>
+                    
                     <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0">
-                        <Button WidthRequest="60" Margin="5" Text="0" Clicked="Keyboard_0" BackgroundColor="gray"/>
-                        <Button WidthRequest="60" Margin="5" Text="," Clicked="Keyboard_Decimal" BackgroundColor="gray"/>
+                        <Button WidthRequest="60" x:Name="button0" Margin="5" Text="0" Clicked="Keyboard_0" BackgroundColor="gray"/>
+                        <ImageButton CornerRadius="10" Padding="10" MaximumHeightRequest="50" Source="send_icon.png" WidthRequest="60" HeightRequest="40" Margin="5" x:Name="decimalOrSend"  Clicked="Keyboard_Decimal" BackgroundColor="Green"/>
                         <Button WidthRequest="60" Margin="5" Text="←" Clicked="Keyboard_back" BackgroundColor="gray"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
-                <!--zmenčit mezery-->
                 <VerticalStackLayout x:Name="Butt" IsVisible="False">
-                    <Button Text="Uplatnit slevu" Clicked="Use_Sale" BackgroundColor="#006da4" BorderColor="#006da4" Margin="5"/>
+                    <Button Text="Uplatnit slevu" Clicked="Use_Sale" BackgroundColor="Green" BorderColor="Green" Margin="5"/>
                     <Button Text="Resetovat" Clicked="ResetButton" BackgroundColor="#006da4" BorderColor="#006da4" Margin="5,0"/>
+                </VerticalStackLayout>                
+                <VerticalStackLayout x:Name="maunalyButton" IsVisible="False">
+                    <Button Text="Zadat ručně" Clicked="ManualyAddCardId" Margin="5" BackgroundColor="#908f90" BorderColor="#908f90" TextColor="Black"/>
                 </VerticalStackLayout>
-            </VerticalStackLayout>
+            </StackLayout>
         </VerticalStackLayout>
     </ScrollView>
 

@@ -1,6 +1,4 @@
 using MauiScanner.Login;
-using System;
-using System.Text.Json;
 
 namespace MauiScanner;
 
@@ -9,48 +7,38 @@ public partial class LoginPage : ContentPage
 
     private LoginClass _loginClass;
     public LoginPage()
-	{
-		InitializeComponent();
-        Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("MyCustomization", (handler, view) =>
-        {
-#if ANDROID
-            handler.PlatformView.ShowSoftInputOnFocus = true;
-#endif
-        });
+    {
+        InitializeComponent();
+
         _loginClass = new LoginClass();
     }
 
-    private async void log_Clicked(object sender, EventArgs e)
+    private async void log_Clicked( object sender, EventArgs e )
     {
 
-        List<string> responseO = await _loginClass.Login(username.Text,password.Text);
+        List<string> responseO = await _loginClass.Login( username.Text, password.Text );
         try
         {
-            if (responseO[0] !="0")
+            if( responseO[ 0 ] != "0" )
             {
                 UserClass user = new UserClass();
-                user.Id = responseO[0];
+                user.XUser = responseO[ 0 ];
                 user.UserName = username.Text;
-                user.Password = _loginClass.CreateMD5(password.Text);
-                await _loginClass.Create(user);
+                user.Password = _loginClass.CreateMD5( password.Text );
+                await _loginClass.Create( user );
                 await Navigation.PopModalAsync();
             }
             else
             {
-                test.Text = responseO[1];
+                test.Text = responseO[ 1 ];
             }
         }
-        catch (Exception)
+        catch( Exception )
         {
-            test.Text = "Nepovedlo se pøihlásit";
+
+            App.Current.Resources.TryGetValue( "LoginFail", out object loginFail );
+            test.Text = (string)loginFail;
         }
     }
 }
-public class loginResponse
-{
-    public JsonElement securid { get; set; }
-    public string? reason { get; set; }
-    public string? name_surname { get; set; }
-    public string? email { get; set; }
-    public string? telefon { get; set; }
-}
+
