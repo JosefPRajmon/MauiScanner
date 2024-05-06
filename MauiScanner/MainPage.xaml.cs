@@ -160,6 +160,7 @@ namespace MauiScanner
                             }
                             else if( scannedResponseClass.Status == "Error" )
                             {
+                                cartInfo.Text = "Znovu se přihlašuji.\nPočkejte prosím.";
                                 bool reLoged = await _loginClass.ReLogin();
                                 if( reLoged )
                                 {
@@ -287,7 +288,7 @@ namespace MauiScanner
             backgraundPlatnost.BackgroundColor = Color.FromHex( "#006da4" );
             maunalyButton.IsVisible = false;//true
             Kalkulacka.IsVisible = true;
-            visiblePlatnost.IsVisible = false;
+            visiblePlatnost.IsVisible = true;
             idCardEntry.Text = string.Empty;
         }
 
