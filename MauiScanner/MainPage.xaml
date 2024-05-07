@@ -6,11 +6,15 @@
              x:Class="MauiScanner.MainPage">
 
     <ScrollView>
-        <VerticalStackLayout BackgroundColor="#e1eef4">
-                <Image
+        <VerticalStackLayout BackgroundColor="#e1eef4" Margin="0" Padding="0">
+            <Grid Margin="0" Padding="0" ColumnDefinitions="*,40" RowSpacing="0" HeightRequest="73.5">
+                <Image Grid.ColumnSpan="2" Margin="0"
                 Source="bilina_header_cteni_sm.png"
                 Aspect="AspectFit"
                 SemanticProperties.Description="logo Bíliny" />
+                <ImageButton Grid.Column="1" Source="odhlaseni.png" WidthRequest="20" Clicked="LogOut_Clicked"/>
+            </Grid>
+
             <StackLayout
             VerticalOptions="FillAndExpand"
             Padding="30,30"

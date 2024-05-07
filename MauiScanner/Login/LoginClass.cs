@@ -65,8 +65,7 @@ namespace MauiScanner.Login
         public async Task<Boolean> IsLoggedIn()
         {
             _userClass = await GetUser();
-            return _userClass != null;
-
+            return _userClass != null && _userClass.Password != string.Empty;
         }
         public async void LoginSaver( string usernName, string password )
         {
@@ -78,7 +77,11 @@ namespace MauiScanner.Login
 
         public async Task<UserClass> GetUser()
         {
-            return (UserClass)await _connection.Table<UserClass>().FirstOrDefaultAsync();
+            return (UserClass)await _connection.Table<UserClass>().Where( a => a.Password != string.Empty ).FirstOrDefaultAsync();
+        }
+        public async Task<List<UserClass>> GetUsers()
+        {
+            return await _connection.Table<UserClass>().ToListAsync();
         }
         public async Task Create( UserClass customer )
         {

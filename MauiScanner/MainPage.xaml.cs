@@ -134,8 +134,17 @@ namespace MauiScanner
 
                             }
                             CardId = cardId;
-                            HttpResponseMessage scannedResponseClassResponse = await onlineCheckClass.CheckSale( await _loginClass.GetUserID(), cardId );
-                            scannedResponseClass = await scannedResponseClassResponse.Content.ReadFromJsonAsync<ScannedResponseClass>();
+                            try
+                            {
+                                HttpResponseMessage scannedResponseClassResponse = await onlineCheckClass.CheckSale( await _loginClass.GetUserID(), cardId );
+                                scannedResponseClass = await scannedResponseClassResponse.Content.ReadFromJsonAsync<ScannedResponseClass>();
+                            }
+                            catch( Exception e )
+                            {
+                                await Navigation.PushModalAsync( new LoginPage() );
+                                return;
+                            }
+
 
                             visiblePlatnost.IsVisible = true;
                             ResponseCardClass card = scannedResponseClass.Card;
@@ -615,6 +624,15 @@ namespace MauiScanner
             cenaKalkulacka.IsVisible = false;
             ColectionViewSales.IsVisible = false;
             Butt.IsVisible = false;
+        }
+
+        private async void LogOut_Clicked( object sender, EventArgs e )
+        {
+            UserClass user = await _loginClass.GetUser();
+            user.Password = string.Empty;
+            user.XUser = string.Empty;
+            _loginClass.Update( user );
+            await Navigation.PushModalAsync( new LoginPage() );
         }
     }
 

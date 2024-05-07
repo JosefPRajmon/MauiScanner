@@ -12,7 +12,19 @@ public partial class LoginPage : ContentPage
 
         _loginClass = new LoginClass();
     }
-
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        Task.Run( async () =>
+        {
+            List<UserClass> users = await _loginClass.GetUsers();
+            MainThread.BeginInvokeOnMainThread( () =>
+            {
+                AllUsers.ItemsSource = users;
+            } );
+        } );
+        // AllUsers.ItemsSource = _loginClass.get
+    }
     private async void log_Clicked( object sender, EventArgs e )
     {
 
@@ -39,6 +51,11 @@ public partial class LoginPage : ContentPage
             App.Current.Resources.TryGetValue( "LoginFail", out object loginFail );
             test.Text = (string)loginFail;
         }
+    }
+
+    private void TapGestureRecognizer_Tapped( object sender, TappedEventArgs e )
+    {
+        TapGestureRecognizer a = (TapGestureRecognizer)sender;
     }
 }
 

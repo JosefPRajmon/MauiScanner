@@ -3,12 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiScanner.LoginPage"
              Title="LoginPage">
-    <VerticalStackLayout BackgroundColor="#e1eef4">
+    <StackLayout BackgroundColor="#e1eef4">
         <Image
                 Source="bilina_header_cteni_sm.png"
                 Aspect="AspectFit"
                 SemanticProperties.Description="logo Bíliny" />
-        <VerticalStackLayout
+        <Grid RowDefinitions="250,*">
+           <StackLayout
             VerticalOptions="FillAndExpand"
             Padding="30,30"
             Spacing="25">
@@ -16,6 +17,19 @@
             <Entry x:Name="password" Placeholder="Heslo" IsPassword="True"/>
             <Button x:Name="log" Text="Přihlásit" Clicked="log_Clicked"  BackgroundColor="#006da4" BorderColor="#006da4"/>
             <Label x:Name="test" TextColor="Red"/>
-        </VerticalStackLayout>
-    </VerticalStackLayout>
+        </StackLayout>
+        <CollectionView x:Name="AllUsers" Grid.Row="1">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding UserName}" Margin="10"/>
+                   
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+                <CollectionView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                </CollectionView.GestureRecognizers>
+        </CollectionView>
+        </Grid>
+
+    </StackLayout>
 </ContentPage>

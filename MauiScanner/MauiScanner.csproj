@@ -101,6 +101,7 @@
 	  <None Remove="Resources\Images\bilina_header_cteni.png" />
 	  <None Remove="Resources\Images\bilina_header_cteni_sm.png" />
 	  <None Remove="Resources\Images\decimal_icon.png" />
+	  <None Remove="Resources\Images\odhlaseni.svg" />
 	  <None Remove="Resources\Images\send_icon.png" />
 	</ItemGroup>
 
