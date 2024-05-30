@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MauiScanner.Login
 {
@@ -14,5 +10,7 @@ namespace MauiScanner.Login
         public string? name_surname { get; set; }
         public string? email { get; set; }
         public string? telefon { get; set; }
+        [JsonPropertyName( "companies" )]
+        public Dictionary<string, CompaniesClass> Companies { get; set; }
     }
 }

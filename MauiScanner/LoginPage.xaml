@@ -2,34 +2,106 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiScanner.LoginPage"
+             xmlns:local="clr-namespace:MauiScanner"
+             HideSoftInputOnTapped="true"
              Title="LoginPage">
     <StackLayout BackgroundColor="#e1eef4">
         <Image
                 Source="bilina_header_cteni_sm.png"
                 Aspect="AspectFit"
                 SemanticProperties.Description="logo Bíliny" />
-        <Grid RowDefinitions="250,*">
-           <StackLayout
+        <Grid RowDefinitions="260,*">
+            <StackLayout x:Name="login"
             VerticalOptions="FillAndExpand"
             Padding="30,30"
             Spacing="25">
-            <Entry x:Name="username" Placeholder="Uživatelské jméno"/>
-            <Entry x:Name="password" Placeholder="Heslo" IsPassword="True"/>
-            <Button x:Name="log" Text="Přihlásit" Clicked="log_Clicked"  BackgroundColor="#006da4" BorderColor="#006da4"/>
-            <Label x:Name="test" TextColor="Red"/>
-        </StackLayout>
-        <CollectionView x:Name="AllUsers" Grid.Row="1">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Label Text="{Binding UserName}" Margin="10"/>
-                   
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-                <CollectionView.GestureRecognizers>
+                <Entry x:Name="username" Placeholder="Uživatelské jméno"/>
+                <Entry x:Name="password" Placeholder="Heslo" IsPassword="true" 
+                       
+                       />
+                <Button x:Name="log" Text="Přihlásit" Clicked="log_Clicked"  BackgroundColor="#006da4" BorderColor="#006da4"/>
+                <Label x:Name="test" TextColor="Red"/>
+            </StackLayout>
+            <CollectionView x:Name="AllUsers" Grid.Row="1" SelectionMode="Single" SelectionChanged="AllUsers_SelectionChanged">
+                <!--<CollectionView.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                </CollectionView.GestureRecognizers>
-        </CollectionView>
-        </Grid>
+                </CollectionView.GestureRecognizers>-->
+                <CollectionView.Resources>
+                    <ResourceDictionary>
+                        <local:StatusToColorConverter x:Key="StatusToColorConverter"/>
+                        <local:StatusToColorConverterClicked x:Key="StatusToColorConverterClicked"/>
+                        <local:StatusToColorConverterLoginClickedText x:Key="StatusToColorConverterLoginClickedText"/>
+                    </ResourceDictionary>
+                </CollectionView.Resources>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="10" Padding="5"  BackgroundColor="#006da4" InputTransparent="True">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="white" />
+                                            <Setter TargetName="NameLabel" Property="Label.TextColor" Value="black"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Label x:Name="NameLabel" Text="{Binding UserName}" InputTransparent="True" TextColor="White"/>
+                        </Frame >
 
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <StackLayout x:Name="CompanyStack" IsVisible="False" Grid.RowSpan="2">
+                <Label x:Name="tittleDown" Margin="10" Text="Vyberte společnost:"/>
+                <CollectionView x:Name="Companies" IsVisible="true" SelectionMode="Single" SelectionChanged="Companies_SelectionChanged" MinimumHeightRequest="30">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="5" Padding="5"  BackgroundColor="white" InputTransparent="True">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="#006da4" />
+                                                <Setter TargetName="LabelCompany" Property="Label.TextColor" Value="white"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Label Text="{Binding Name}" x:Name="LabelCompany" Margin="10" InputTransparent="True"/>
+                            </Frame >
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label x:Name="tittleWorkshopDown" Margin="10" Text="Vyberte provozovnu:" IsVisible="False"/>
+                <CollectionView x:Name="Workshops" IsVisible="true" SelectionMode="Single" Margin="5" SelectionChanged="Selectworkshop">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="5" Padding="5"  BackgroundColor="white" InputTransparent="True">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="#006da4" />
+                                                <Setter TargetName="LabelWorkShop" Property="Label.TextColor" Value="white"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Label Text="{Binding .}" x:Name="LabelWorkShop" Margin="10" InputTransparent="True"/>
+                            </Frame >
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+                <Label x:Name="errorSelect" TextColor="red" HorizontalTextAlignment="Center"/>
+                <Button x:Name="ButtonSelecter" Clicked="Button_Clicked" Text="Zvolit" Margin="10" IsVisible="False" BackgroundColor="Green" BorderColor="Green"/>
+
+            </StackLayout>
+        </Grid>
     </StackLayout>
 </ContentPage>

@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace MauiScanner.Login
 {
-    internal class LoginClass
+    public class LoginClass
     {
         public UserClass _userClass;
         private const string DB_NAME = "user_db_test.DB3";
@@ -23,15 +23,7 @@ namespace MauiScanner.Login
 
             if( accessType == NetworkAccess.Internet )
             {
-                loginResponse responseO = JsonSerializer.Deserialize<loginResponse>(
-                     await Task.Run( async () =>
-                     {
-                         HttpClient client = new HttpClient();
-                         HttpResponseMessage response = await client.GetAsync( "https://www.as4u.cz/mobile/json.php?akce=login&name=" + username + "&pass=" + password );
-                         string responseS = await response.Content.ReadAsStringAsync();
-                         return responseS;
-                     } )
-                    );
+                loginResponse responseO = await LogingChecker( username, password );
                 if( responseO.securid.ValueKind == JsonValueKind.String )
                 {
                     return new List<string>() { responseO.securid.ToString(), "" };
@@ -46,6 +38,20 @@ namespace MauiScanner.Login
                 App.Current.Resources.TryGetValue( "InternetOut", out object Error );
                 return new List<string>() { "0", (string)Error };
             }
+        }
+
+        public async Task<loginResponse> LogingChecker( string username, string password )
+        {
+            password = password.ToLower();
+            return JsonSerializer.Deserialize<loginResponse>(
+                 await Task.Run( async () =>
+                 {
+                     HttpClient client = new HttpClient();
+                     HttpResponseMessage response = await client.GetAsync( string.Format( "https://karta-bilina.as4u.cz/redakce/json.php?akce=login&name={0}&pass={1}", username, password ) );
+                     string responseS = await response.Content.ReadAsStringAsync();
+                     return responseS;
+                 } )
+                );
         }
 
         public async Task<string> GetUserID( Boolean reload = false )
@@ -79,6 +85,10 @@ namespace MauiScanner.Login
         {
             return (UserClass)await _connection.Table<UserClass>().Where( a => a.Password != string.Empty ).FirstOrDefaultAsync();
         }
+        public async Task<UserClass> GetUser( string name )
+        {
+            return (UserClass)await _connection.Table<UserClass>().Where( a => a.UserName == name ).FirstOrDefaultAsync();
+        }
         public async Task<List<UserClass>> GetUsers()
         {
             return await _connection.Table<UserClass>().ToListAsync();
@@ -96,6 +106,7 @@ namespace MauiScanner.Login
 
         public async Task<bool> ReLogin()
         {
+
             UserClass user = await GetUser();
             List<string> responseO = await Login( user.UserName, user.Password.ToLower() );
             user.XUser = responseO[ 0 ];
@@ -109,6 +120,7 @@ namespace MauiScanner.Login
 
         public string CreateMD5( string input )
         {
+            input = input.Trim();
             // Vytvoření nové instance MD5CryptoServiceProvider
             using( MD5 md5 = MD5.Create() )
             {

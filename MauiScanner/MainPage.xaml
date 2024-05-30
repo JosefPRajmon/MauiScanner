@@ -4,18 +4,17 @@
              xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
              xmlns:local="clr-namespace:MauiScanner"
              x:Class="MauiScanner.MainPage">
-
-    <ScrollView>
+    <ScrollView Margin="0" Padding="0">
         <VerticalStackLayout BackgroundColor="#e1eef4" Margin="0" Padding="0">
-            <Grid Margin="0" Padding="0" ColumnDefinitions="*,40" RowSpacing="0" HeightRequest="73.5">
-                <Image Grid.ColumnSpan="2" Margin="0"
+            <Grid Margin="0" Padding="0" ColumnDefinitions="*,40" RowSpacing="0" ColumnSpacing="0" HorizontalOptions="FillAndExpand" x:Name="tittleGrid">
+                <Image Grid.ColumnSpan="2" Margin="0" VerticalOptions="Start"
                 Source="bilina_header_cteni_sm.png"
                 Aspect="AspectFit"
-                SemanticProperties.Description="logo Bíliny" />
-                <ImageButton Grid.Column="1" Source="odhlaseni.png" WidthRequest="20" Clicked="LogOut_Clicked"/>
+                SemanticProperties.Description="logo Bíliny" x:Name="imageTitle" SizeChanged="imageTitle_SizeChanged" />
+                <ImageButton Grid.Column="1" VerticalOptions="Center" Source="odhlaseni.png" WidthRequest="20" Clicked="LogOut_Clicked"/>
             </Grid>
 
-            <StackLayout
+            <StackLayout 
             VerticalOptions="FillAndExpand"
             Padding="30,30"
             Spacing="0">

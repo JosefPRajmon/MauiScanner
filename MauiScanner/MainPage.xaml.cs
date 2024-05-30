@@ -6,15 +6,6 @@ using System.Net.Http.Json;
 namespace MauiScanner
 {
 
-    /*
-     <<!--
-    hotovo --  při defaultu nechat objevenou klávesnici
-    
-    hotovo -- kalkulačku upravit aby vypadal jako ta v telefonování 9dole vpravo
-    
-    
-    -->
-     */
     public partial class MainPage : ContentPage
     {
         //private readonly LocalDbService _dbService;
@@ -26,9 +17,10 @@ namespace MauiScanner
         private bool SetDecemal = false;
         private int buttonTimer = 100;
         private string KeysDictonary;
+        public string checkNumber;
         private List<string> KeysListonary { get; set; }
 
-        public MainPage(/*LocalDbService dbService*/)
+        public MainPage( LoginClass loginClass )
         {
             InitializeComponent();
             KeysListonary = new List<string>();
@@ -37,18 +29,10 @@ namespace MauiScanner
                 await Clipboard.Default.SetTextAsync(cardId); ;
             };
             platnost.GestureRecognizers.Add(tapGestureRecognizer);*/
-            _loginClass = new LoginClass();
-            Task.Run( async () =>
-            {
-                Boolean log = await _loginClass.IsLoggedIn();
-                if( !log )
-                {
-                    await Navigation.PushModalAsync( new LoginPage() );
-                    _loginClass = new LoginClass();
-                }
-                //usePriceCheckbox.IsChecked = _loginClass._userClass.UsePrice;
-            } );
+            _loginClass = loginClass;
 
+            // Skrytí horní navigaèní lišty
+            NavigationPage.SetHasNavigationBar( this, false );
 
             onlineCheckClass = new OnlineCheckClass();
             cameraView.BarCodeDecoder = new ZXingBarcodeDecoder();
@@ -71,6 +55,7 @@ namespace MauiScanner
         /// <param name="e"></param>
         private void cameraView_CamerasLoaded( object sender, EventArgs e )
         {
+            var b = imageTitle.Height;
             try
             {
                 cameraView.Camera = cameraView.Cameras[ 0 ];
@@ -125,8 +110,11 @@ namespace MauiScanner
                     {
                         try
                         {
+                            string a = cardId.Substring( cardId.Length - 1, 1 ).ToString();
+                            checkNumber = a;
                             try
                             {
+
                                 cardId = cardId.Substring( 0, 12 ).TrimStart( '0' );
                             }
                             catch( Exception )
@@ -141,7 +129,8 @@ namespace MauiScanner
                             }
                             catch( Exception e )
                             {
-                                await Navigation.PushModalAsync( new LoginPage() );
+                                Application.Current.MainPage = new NavigationPage( new LoginPage( _loginClass ) );
+                                Navigation.PopToRootAsync();
                                 return;
                             }
 
@@ -152,14 +141,14 @@ namespace MauiScanner
                             if( scannedResponseClass.Status == "OK" )
                             {
                                 App.Current.Resources.TryGetValue( "CartInfoOkFormated", out object cartInfoText );
-                                cartInfo.Text = string.Format(/*"Id karty: {0}<br>Držitel: {1}<br>Sarozen/a roku: {2}"*/(string)cartInfoText, /*card.HolderID*/CardId, card.HolderName, card.HolderYearBirth );
+                                cartInfo.Text = string.Format(/*"Id karty: {0}<br>Držitel: {1}<br>Sarozen/a roku: {2}"*/(string)cartInfoText, /*card.HolderID*/CardId + checkNumber, card.HolderName, card.HolderYearBirth );
                                 //cartInfo.TextType= TextType.Text;
                                 ColectionViewSales.IsVisible = true;
                                 foreach( var item in scannedResponseClass.Sales.Keys )
                                 {
                                     scannedResponseClass.Sales[ item ].Key = item;
                                 }
-                                ColectionViewSales.ItemsSource = scannedResponseClass.Sales.Values;//.Where(sales =>sales.Status != "error").ToList();
+                                ColectionViewSales.ItemsSource = scannedResponseClass.Sales.Values;
                                 Butt.IsVisible = true;
                                 backgraundPlatnost.BackgroundColor = Colors.Green;
                                 Kalkulacka.IsVisible = false;
@@ -181,7 +170,7 @@ namespace MauiScanner
                             else
                             {
                                 App.Current.Resources.TryGetValue( "CartInfoErrorFormated", out object cartInfoErrorFormated );
-                                cartInfo.Text = string.Format( (string)cartInfoErrorFormated, scannedResponseClass.Infotext, cardId );
+                                cartInfo.Text = string.Format( (string)cartInfoErrorFormated, scannedResponseClass.Infotext, cardId + checkNumber );
                                 ColectionViewSales.IsVisible = false;
                                 cartInfo.TextColor = Colors.White;
                                 backgraundPlatnost.BackgroundColor = Colors.Red;
@@ -497,7 +486,7 @@ namespace MauiScanner
                     }
                     int checker = int.Parse( checkedIdString.Substring( 12, 1 ) );
                     string toCheck = checkedIdString.Substring( 0, 12 );
-
+                    checkNumber = toCheck;
                     List<int> evenPositions = new List<int>();//sudy
                     List<int> oddPositions = new List<int>();//lichy
                     int even = 0; int odd = 0;
@@ -524,7 +513,7 @@ namespace MauiScanner
                     }
                     if( 10 - ( ( even + odd ) % 10 ) == checker )
                     {
-                        CheckCard( checkedIdString/*idCardEntry.Text*/ );
+                        CheckCard( checkedIdString );
                     }
                     else
                     {
@@ -549,7 +538,7 @@ namespace MauiScanner
             }
 
         }
-
+        /*
         private void KeyboardTausend()
         {
             cena.Text = $"{cena.Text:C}";
@@ -563,7 +552,13 @@ namespace MauiScanner
                 reverse += cArray[ i ];
             }
             return reverse;
-        }
+        }*/
+        /// <summary>
+        /// Function tu button
+        /// This function default screen of application 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ResetButton( object sender, EventArgs e )
         {
 
@@ -581,13 +576,16 @@ namespace MauiScanner
 
         }
 
+        /// <summary>
+        /// function to select of collectionView
+        /// When i select items this item functtion add selected item to List bycause e,currentSelected no removing all items
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ColectionViewSales_SelectionChanged( object sender, SelectionChangedEventArgs e )
         {
 
-            // Najdeme prvky, které byly přidány
             var added = e.CurrentSelection.Except( e.PreviousSelection ).ToList();
-
-            // Najdeme prvky, které byly odstraněny
             var removed = e.PreviousSelection.Except( e.CurrentSelection ).ToList();
 
             if( removed.Count == 0 )
@@ -614,6 +612,11 @@ namespace MauiScanner
             }
         }
 
+        /// <summary>
+        /// this function show wmanualy writer to id Cart 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ManualyAddCardId( object sender, EventArgs e )
         {
             maunalyButton.IsVisible = false;
@@ -625,16 +628,47 @@ namespace MauiScanner
             ColectionViewSales.IsVisible = false;
             Butt.IsVisible = false;
         }
-
+        /// <summary>
+        /// logOut funcion remove password and Xuser and set login page to mainPage and finaly go LoginPage
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void LogOut_Clicked( object sender, EventArgs e )
         {
-            UserClass user = await _loginClass.GetUser();
-            user.Password = string.Empty;
-            user.XUser = string.Empty;
-            _loginClass.Update( user );
-            await Navigation.PushModalAsync( new LoginPage() );
+            try
+            {
+                UserClass user = await _loginClass.GetUser();
+                user.Password = string.Empty;
+                user.XUser = string.Empty;
+                user.Workshop = string.Empty;
+                user.Companie = string.Empty;
+                await _loginClass.Update( user );
+                try
+                {
+                    Application.Current.MainPage = new NavigationPage( new LoginPage( _loginClass ) );
+                }
+                catch( Exception )
+                {
+
+                }
+                try
+                {
+                    Navigation.PopToRootAsync();
+                }
+                catch( Exception )
+                {
+
+                }
+            }
+            catch( Exception )
+            {
+            }
+        }
+
+        private void imageTitle_SizeChanged( object sender, EventArgs e )
+        {
+            Image image = (Image)sender;
+            tittleGrid.HeightRequest = image.Height;
         }
     }
-
-
 }
