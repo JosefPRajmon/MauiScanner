@@ -24,7 +24,7 @@
 		<ApplicationTitle>MauiScanner</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.mauiscanner</ApplicationId>
+		<ApplicationId>cz.as4u.mauiscanner</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

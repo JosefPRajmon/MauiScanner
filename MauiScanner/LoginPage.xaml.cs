@@ -51,7 +51,7 @@ public partial class LoginPage : ContentPage
                     MainThread.BeginInvokeOnMainThread( () =>
                     {
                         AllUsers.ItemsSource = users;
-                        AllUsers.IsVisible = true;
+                        AllUsers.IsVisible = false;
                         login.IsVisible = true;
                     } );
                 }

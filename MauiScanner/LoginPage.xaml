@@ -22,10 +22,7 @@
                 <Button x:Name="log" Text="Přihlásit" Clicked="log_Clicked"  BackgroundColor="#006da4" BorderColor="#006da4"/>
                 <Label x:Name="test" TextColor="Red"/>
             </StackLayout>
-            <CollectionView x:Name="AllUsers" Grid.Row="1" SelectionMode="Single" SelectionChanged="AllUsers_SelectionChanged">
-                <!--<CollectionView.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                </CollectionView.GestureRecognizers>-->
+            <CollectionView x:Name="AllUsers" Grid.Row="1" SelectionMode="Single" SelectionChanged="AllUsers_SelectionChanged" IsVisible="False">
                 <CollectionView.Resources>
                     <ResourceDictionary>
                         <local:StatusToColorConverter x:Key="StatusToColorConverter"/>
