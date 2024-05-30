@@ -55,7 +55,6 @@ namespace MauiScanner
         /// <param name="e"></param>
         private void cameraView_CamerasLoaded( object sender, EventArgs e )
         {
-            var b = imageTitle.Height;
             try
             {
                 cameraView.Camera = cameraView.Cameras[ 0 ];
