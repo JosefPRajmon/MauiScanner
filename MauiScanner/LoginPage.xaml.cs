@@ -201,7 +201,10 @@ public partial class LoginPage : ContentPage
                                 errorSelect.GestureRecognizers.Add( tapGestureRecognizer );
 
                                 Dictionary<string, CompaniesClass> companies = loginRe.Companies;
+
                                 Companies.ItemsSource = companies.Values;
+                                
+
                             }
                             else if( workshopDictionary.Count > 1 )
                             {
@@ -233,7 +236,13 @@ public partial class LoginPage : ContentPage
                     else
                     {
 
-
+                        if (loginRe.Companies is null)
+                        {
+                            _loginClass.LogOut();
+                            login.IsVisible = true;
+                            test.Text = "Nemáte přiřazenou žádnou společnost, Odhlášili jsme váš.";
+                            return;
+                        }
                         CompanyStack.IsVisible = true;
                         if( loginRe.Companies.Count > 1 )//!=1
                         {

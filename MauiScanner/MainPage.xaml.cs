@@ -636,27 +636,25 @@ namespace MauiScanner
         {
             try
             {
-                UserClass user = await _loginClass.GetUser();
-                user.Password = string.Empty;
-                user.XUser = string.Empty;
-                user.Workshop = string.Empty;
-                user.Companie = string.Empty;
-                await _loginClass.Update( user );
-                try
+                
+                if (await _loginClass.LogOut())
                 {
-                    Application.Current.MainPage = new NavigationPage( new LoginPage( _loginClass ) );
-                }
-                catch( Exception )
-                {
+                    try
+                    {
+                        Application.Current.MainPage = new NavigationPage(new LoginPage(_loginClass));
+                    }
+                    catch (Exception)
+                    {
 
-                }
-                try
-                {
-                    Navigation.PopToRootAsync();
-                }
-                catch( Exception )
-                {
+                    }
+                    try
+                    {
+                        Navigation.PopToRootAsync();
+                    }
+                    catch (Exception)
+                    {
 
+                    }
                 }
             }
             catch( Exception )

@@ -17,6 +17,25 @@ namespace MauiScanner.Login
             _connection.CreateTableAsync<UserClass>().Wait();
         }
 
+        public async Task<bool> LogOut()
+        {
+            try
+            {
+                UserClass user = await GetUser();
+                user.Password = string.Empty;
+                user.XUser = string.Empty;
+                user.Workshop = string.Empty;
+                user.Companie = string.Empty;
+                await Update(user);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+
         public async Task<List<string>> Login( string username, string password )
         {
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
