@@ -18,5 +18,8 @@ namespace MauiScanner.Scanned
         public Dictionary<string, ResponseSaleClass>? Sales { get; set; }
         [JsonPropertyName("infotext")]
         public string? Infotext { get; set; }
+
+        [JsonPropertyName("errorNo")]
+        public int ErrorNo { get; set; }
     }
 }

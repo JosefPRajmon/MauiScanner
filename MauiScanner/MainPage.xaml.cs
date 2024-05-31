@@ -20,7 +20,7 @@ namespace MauiScanner
         public string checkNumber;
         private List<string> KeysListonary { get; set; }
 
-        public MainPage( LoginClass loginClass )
+        public MainPage(LoginClass loginClass)
         {
             InitializeComponent();
             KeysListonary = new List<string>();
@@ -32,7 +32,7 @@ namespace MauiScanner
             _loginClass = loginClass;
 
             // Skrytí horní navigaèní lišty
-            NavigationPage.SetHasNavigationBar( this, false );
+            NavigationPage.SetHasNavigationBar(this, false);
 
             onlineCheckClass = new OnlineCheckClass();
             cameraView.BarCodeDecoder = new ZXingBarcodeDecoder();
@@ -53,26 +53,26 @@ namespace MauiScanner
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cameraView_CamerasLoaded( object sender, EventArgs e )
+        private void cameraView_CamerasLoaded(object sender, EventArgs e)
         {
             try
             {
-                cameraView.Camera = cameraView.Cameras[ 0 ];
-                MainThread.BeginInvokeOnMainThread( async () =>
+                cameraView.Camera = cameraView.Cameras[0];
+                MainThread.BeginInvokeOnMainThread(async () =>
                 {
                     try
                     {
                         await cameraView.StopCameraAsync();
 
                     }
-                    catch( Exception )
+                    catch (Exception)
                     {
                     }
                     await cameraView.StartCameraAsync();
-                } );
+                });
 
             }
-            catch( Exception )
+            catch (Exception)
             {
 
             }
@@ -83,52 +83,54 @@ namespace MauiScanner
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void cameraView_BarcodeDetected( object sender, Camera.MAUI.ZXingHelper.BarcodeEventArgs args )
+        private void cameraView_BarcodeDetected(object sender, Camera.MAUI.ZXingHelper.BarcodeEventArgs args)
         {
-            CheckCard( args.Result[ 0 ].Text );
+            CheckCard(args.Result[0].Text);
         }
 
         /// <summary>
         /// its method to Check idcard on server as4u
         /// </summary>
         /// <param name="cardId"></param>
-        private void CheckCard( string cardId )
+        private void CheckCard(string cardId)
         {
             try
             {
-                if( !open )
+                if (!open)
                 {
                     open = true;
-                    Task.Run( () =>
+                    visibleColor.Children.Clear();
+                    backgraundPlatnost.IsVisible = true;
+                    Task.Run(() =>
                     {
-                        TimeSpan vibrationLength = TimeSpan.FromSeconds( 0.5 );
+                        TimeSpan vibrationLength = TimeSpan.FromSeconds(0.5);
 
-                        Vibration.Default.Vibrate( vibrationLength );
-                    } );
-                    MainThread.BeginInvokeOnMainThread( async () =>
+                        Vibration.Default.Vibrate(vibrationLength);
+                    });
+                    MainThread.BeginInvokeOnMainThread(async () =>
                     {
                         try
                         {
-                            string a = cardId.Substring( cardId.Length - 1, 1 ).ToString();
+                            string a = cardId.Substring(cardId.Length - 1, 1).ToString();
                             checkNumber = a;
                             try
                             {
 
-                                cardId = cardId.Substring( 0, 12 ).TrimStart( '0' );
+                                cardId = cardId.Substring(0, 12).TrimStart('0');
                             }
-                            catch( Exception )
+                            catch (Exception)
                             {
 
                             }
                             CardId = cardId;
                             try
                             {
-                                HttpResponseMessage scannedResponseClassResponse = await onlineCheckClass.CheckSale( await _loginClass.GetUserID(), cardId );
+                                HttpResponseMessage scannedResponseClassResponse = await onlineCheckClass.CheckSale(await _loginClass.GetUserID(), cardId);
                                 scannedResponseClass = await scannedResponseClassResponse.Content.ReadFromJsonAsync<ScannedResponseClass>();
                             }
-                            catch( Exception e )
+                            catch (Exception e)
                             {
-                                Application.Current.MainPage = new NavigationPage( new LoginPage( _loginClass ) );
+                                Application.Current.MainPage = new NavigationPage(new LoginPage(_loginClass));
                                 Navigation.PopToRootAsync();
                                 return;
                             }
@@ -137,15 +139,15 @@ namespace MauiScanner
                             visiblePlatnost.IsVisible = true;
                             ResponseCardClass card = scannedResponseClass.Card;
                             KeysListonary = new List<string>();
-                            if( scannedResponseClass.Status == "OK" )
+                            if (scannedResponseClass.Status == "OK")
                             {
-                                App.Current.Resources.TryGetValue( "CartInfoOkFormated", out object cartInfoText );
-                                cartInfo.Text = string.Format(/*"Id karty: {0}<br>Držitel: {1}<br>Sarozen/a roku: {2}"*/(string)cartInfoText, /*card.HolderID*/CardId + checkNumber, card.HolderName, card.HolderYearBirth );
+                                App.Current.Resources.TryGetValue("CartInfoOkFormated", out object cartInfoText);
+                                cartInfo.Text = string.Format(/*"Id karty: {0}<br>Držitel: {1}<br>Sarozen/a roku: {2}"*/(string)cartInfoText, /*card.HolderID*/CardId + checkNumber, card.HolderName, card.HolderYearBirth);
                                 //cartInfo.TextType= TextType.Text;
                                 ColectionViewSales.IsVisible = true;
-                                foreach( var item in scannedResponseClass.Sales.Keys )
+                                foreach (var item in scannedResponseClass.Sales.Keys)
                                 {
-                                    scannedResponseClass.Sales[ item ].Key = item;
+                                    scannedResponseClass.Sales[item].Key = item;
                                 }
                                 ColectionViewSales.ItemsSource = scannedResponseClass.Sales.Values;
                                 Butt.IsVisible = true;
@@ -155,21 +157,21 @@ namespace MauiScanner
                                 cartInfo.TextColor = Colors.White;
                                 maunalyButton.IsVisible = false;
                             }
-                            else if( scannedResponseClass.Status == "Error" )
+                            else if (scannedResponseClass.Status == "Error")
                             {
                                 cartInfo.Text = "Znovu se přihlašuji.\nPočkejte prosím.";
                                 bool reLoged = await _loginClass.ReLogin();
-                                if( reLoged )
+                                if (reLoged)
                                 {
                                     open = false;
-                                    CheckCard( cardId );
+                                    CheckCard(cardId);
                                     return;
                                 }
                             }
                             else
                             {
-                                App.Current.Resources.TryGetValue( "CartInfoErrorFormated", out object cartInfoErrorFormated );
-                                cartInfo.Text = string.Format( (string)cartInfoErrorFormated, scannedResponseClass.Infotext, cardId + checkNumber );
+                                App.Current.Resources.TryGetValue("CartInfoErrorFormated", out object cartInfoErrorFormated);
+                                cartInfo.Text = string.Format((string)cartInfoErrorFormated, scannedResponseClass.Infotext, cardId + checkNumber);
                                 ColectionViewSales.IsVisible = false;
                                 cartInfo.TextColor = Colors.White;
                                 backgraundPlatnost.BackgroundColor = Colors.Red;
@@ -190,7 +192,7 @@ namespace MauiScanner
                                 await cameraView.StopCameraAsync();
 
                             }
-                            catch( Exception e )
+                            catch (Exception e)
                             {
                             }
                             try
@@ -198,21 +200,21 @@ namespace MauiScanner
 
                                 await cameraView.StartCameraAsync();
                             }
-                            catch( Exception e )
+                            catch (Exception e)
                             {
 
                             }
-                            await Task.Delay( 2000 ); // Prodleva 2 sekundu
+                            await Task.Delay(2000); // Prodleva 2 sekundu
                             open = false;
                         }
-                        catch( Exception )
+                        catch (Exception)
                         {
                             open = false;
                         }
-                    } );
+                    });
                 }
             }
-            catch( Exception )
+            catch (Exception)
             {
                 open = false;
             }
@@ -226,13 +228,13 @@ namespace MauiScanner
         {
             try
             {
-                double puvCena = double.Parse( entryNum.Text );
+                double puvCena = double.Parse(entryNum.Text);
                 double percent = puvCena / 100;
                 //string price = $"{puvCena - (percent * double.Parse(scannedResponseClass.sale)):C}";
                 //cena.Text = price.Split("K")[0];
                 //KeyboardTausend();
             }
-            catch( Exception )
+            catch (Exception)
             {
                 cena.Text = string.Empty;
             }
@@ -244,26 +246,26 @@ namespace MauiScanner
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void Use_Sale( object sender, EventArgs e )
+        private async void Use_Sale(object sender, EventArgs e)
         {
-            HapticFeedback.Default.Perform( HapticFeedbackType.Click );
+            HapticFeedback.Default.Perform(HapticFeedbackType.Click);
             KeysDictonary = "";
-            foreach( var item in KeysListonary )
+            foreach (var item in KeysListonary)
             {
                 KeysDictonary += $"{item},";
             }
-            KeysDictonary = KeysDictonary.TrimEnd( ',' );
+            KeysDictonary = KeysDictonary.TrimEnd(',');
 
-            if( KeysDictonary.Length < 1 )
+            if (KeysDictonary.Length < 1)
             {
-                App.Current.Resources.TryGetValue( "ZeroSale", out object Error );
+                App.Current.Resources.TryGetValue("ZeroSale", out object Error);
                 cartInfo.Text = (string)Error;
                 cartInfo.TextColor = Colors.White;
                 backgraundPlatnost.BackgroundColor = Colors.Red;
                 return;
             }
 
-            HttpResponseMessage scannedResponseClassResponse = await onlineCheckClass.UseSale( await _loginClass.GetUserID(), CardId, KeysDictonary );
+            HttpResponseMessage scannedResponseClassResponse = await onlineCheckClass.UseSale(await _loginClass.GetUserID(), CardId, KeysDictonary);
             ScannedResponseClass result = await scannedResponseClassResponse.Content.ReadFromJsonAsync<ScannedResponseClass>();
             Butt.IsVisible = false;
             entryNum.Text = string.Empty;
@@ -272,17 +274,30 @@ namespace MauiScanner
             Kalkulacka.IsVisible = false;
             ColectionViewSales.IsVisible = false;
             string responseSales = "";
-            foreach( var item in KeysListonary )
+            foreach (var item in KeysListonary)
             {
-                ResponseSaleClass sale = result.Sales[ item ];
-                responseSales += string.Format( "{0}: <br>{1}<br><br>", sale.SaleName, sale.InfoText );
+                //TODO Přidatstacklayout na řádek 24 v xamlu a dodelat tady přidání stacklayoutu do něj rada vloz do frame stacklayout a do nej label a kde nepotřebujes jinak dej colors transparent pokud je sale.ErrorNo ==0 tak vybarvit zelene jinak vybarvit pozadí červene
+                ResponseSaleClass sale = result.Sales[item];
+                responseSales += string.Format("{0}: <br>{1}", sale.SaleName, sale.InfoText);
+                Frame ResultFrame = new Frame { Content = new Label { Text = responseSales, TextColor = Colors.White, TextType = TextType.Html, BackgroundColor = Colors.Transparent }  };
+                if (sale.ErrorNo == 0)
+                {
+                    ResultFrame.BackgroundColor = Colors.Green;
+                }
+                else
+                {
+                    ResultFrame.BackgroundColor = Colors.Red;
+                }
+                // Přidat do visibleColor ResultFrame
+                visibleColor.Children.Add(ResultFrame);
             }
-            responseSales = responseSales.Substring( 0, responseSales.LastIndexOf( "<br><br>" ) );
-            responseSales = responseSales.Replace( "<br>", "\n" );
+            backgraundPlatnost.IsVisible = false;
+            //responseSales = responseSales.Substring(0, responseSales.LastIndexOf("<br><br>"));
+            //responseSales = responseSales.Replace("<br>", "\n");
 
             cartInfo.Text = responseSales;
-            cartInfo.TextColor = Color.FromHex( "#B3FFFFFF" );
-            backgraundPlatnost.BackgroundColor = Color.FromHex( "#006da4" );
+            cartInfo.TextColor = Color.FromHex("#B3FFFFFF");
+            //backgraundPlatnost.BackgroundColor = Color.FromHex("#006da4");
             maunalyButton.IsVisible = false;//true
             Kalkulacka.IsVisible = true;
             visiblePlatnost.IsVisible = true;
@@ -296,21 +311,21 @@ namespace MauiScanner
         /// <param name="add"></param>
         /// <param name="button"></param>
         /// <returns></returns>
-        private string FormaterEntery( string entery, int add, Button button )
+        private string FormaterEntery(string entery, int add, Button button)
         {
 
             string addS = $"{add}";
-            if( add == -1 )
+            if (add == -1)
             {
                 addS = "";
             }
-            if( SetDecemal )
+            if (SetDecemal)
             {
-                double doublee = double.Parse( $"{entery}{addS}" );
-                string result = $"{doublee:C}".Split( "K" )[ 0 ].Trim();
-                if( result[ result.Length - 1 ] == "0"[ 0 ] )
+                double doublee = double.Parse($"{entery}{addS}");
+                string result = $"{doublee:C}".Split("K")[0].Trim();
+                if (result[result.Length - 1] == "0"[0])
                 {
-                    result = result.Remove( result.Length - 1 );
+                    result = result.Remove(result.Length - 1);
                 }
                 return result;
             }
@@ -318,24 +333,25 @@ namespace MauiScanner
             {
                 double doublee = 0.00;
                 string result = "";
-                var parts = entery.Split( "," );
-                if( entery.Contains( "," ) && String.IsNullOrEmpty( parts[ 1 ] ) )
+                var parts = entery.Split(",");
+                if (entery.Contains(",") && String.IsNullOrEmpty(parts[1]))
                 {
-                    addS = ""; parts[ 1 ] = $"{add}";
+                    addS = "";
+                    parts[1] = $"{add}";
                 }
                 try
                 {
-                    doublee = double.Parse( $"{parts[ 0 ]}{addS},{parts[ 1 ]}" );
-                    result = $"{doublee:C}".Split( 'K' )[ 0 ].Trim();
-                    if( result[ result.Length - 1 ] == "0"[ 0 ] )
+                    doublee = double.Parse($"{parts[0]}{addS},{parts[1]}");
+                    result = $"{doublee:C}".Split('K')[0].Trim();
+                    if (result[result.Length - 1] == "0"[0])
                     {
-                        result = result.Remove( result.Length - 1 );
+                        result = result.Remove(result.Length - 1);
                     }
                 }
-                catch( Exception )
+                catch (Exception)
                 {
-                    doublee = double.Parse( $"{parts[ 0 ]}{addS}" );
-                    result = $"{doublee:C}".Split( ',' )[ 0 ].Trim();
+                    doublee = double.Parse($"{parts[0]}{addS}");
+                    result = $"{doublee:C}".Split(',')[0].Trim();
                 }
 
                 return result;
@@ -348,18 +364,18 @@ namespace MauiScanner
         /// </summary>
         /// <param name="value"></param>
         /// <param name="button"></param>
-        public void EditIdCart( int value, Button button )
+        public void EditIdCart(int value, Button button)
         {
-            HapticFeedback.Default.Perform( HapticFeedbackType.Click );
-            button.BackgroundColor = Color.FromHex( "#006da4" );
-            MainThread.BeginInvokeOnMainThread( async () =>
+            HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+            button.BackgroundColor = Color.FromHex("#006da4");
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Task.Delay( buttonTimer );
+                await Task.Delay(buttonTimer);
                 button.BackgroundColor = Colors.Gray;
-            } );
-            if( cenaKalkulacka.IsVisible )
+            });
+            if (cenaKalkulacka.IsVisible)
             {
-                entryNum.Text = FormaterEntery( entryNum.Text, value, button );
+                entryNum.Text = FormaterEntery(entryNum.Text, value, button);
                 Vypocet_Ceny();
             }
             else
@@ -369,84 +385,84 @@ namespace MauiScanner
         }
 
 
-        private void Keyboard_0( object sender, EventArgs e )
+        private void Keyboard_0(object sender, EventArgs e)
         {
-            EditIdCart( 0, (Button)sender );
+            EditIdCart(0, (Button)sender);
         }
 
 
-        private void Keyboard_1( object sender, EventArgs e )
+        private void Keyboard_1(object sender, EventArgs e)
         {
-            EditIdCart( 1, (Button)sender );
+            EditIdCart(1, (Button)sender);
         }
 
 
-        private void Keyboard_2( object sender, EventArgs e )
+        private void Keyboard_2(object sender, EventArgs e)
         {
-            EditIdCart( 2, (Button)sender );
+            EditIdCart(2, (Button)sender);
         }
 
 
-        private void Keyboard_3( object sender, EventArgs e )
+        private void Keyboard_3(object sender, EventArgs e)
         {
-            EditIdCart( 3, (Button)sender );
+            EditIdCart(3, (Button)sender);
         }
 
 
-        private void Keyboard_4( object sender, EventArgs e )
+        private void Keyboard_4(object sender, EventArgs e)
         {
-            EditIdCart( 4, (Button)sender );
+            EditIdCart(4, (Button)sender);
         }
 
 
-        private void Keyboard_5( object sender, EventArgs e )
+        private void Keyboard_5(object sender, EventArgs e)
         {
-            EditIdCart( 5, (Button)sender );
+            EditIdCart(5, (Button)sender);
         }
 
 
-        private void Keyboard_6( object sender, EventArgs e )
+        private void Keyboard_6(object sender, EventArgs e)
         {
-            EditIdCart( 6, (Button)sender );
+            EditIdCart(6, (Button)sender);
         }
 
 
-        private void Keyboard_7( object sender, EventArgs e )
+        private void Keyboard_7(object sender, EventArgs e)
         {
-            EditIdCart( 7, (Button)sender );
+            EditIdCart(7, (Button)sender);
         }
 
 
-        private void Keyboard_8( object sender, EventArgs e )
+        private void Keyboard_8(object sender, EventArgs e)
         {
-            EditIdCart( 8, (Button)sender );
+            EditIdCart(8, (Button)sender);
         }
 
 
-        private void Keyboard_9( object sender, EventArgs e )
+        private void Keyboard_9(object sender, EventArgs e)
         {
-            EditIdCart( 9, (Button)sender );
+            EditIdCart(9, (Button)sender);
         }
         public bool backClicked = false;
 
 
-        private void Keyboard_back( object sender, EventArgs e )
+        private void Keyboard_back(object sender, EventArgs e)
         {
             Button button = (Button)sender;
-            button.BackgroundColor = Color.FromHex( "#006da4" );
-            MainThread.BeginInvokeOnMainThread( async () =>
+            button.BackgroundColor = Color.FromHex("#006da4");
+            MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await Task.Delay( buttonTimer );
+                        await Task.Delay(buttonTimer);
                         button.BackgroundColor = Colors.Gray;
-                    } );
-            HapticFeedback.Default.Perform( HapticFeedbackType.Click );
-            if( cenaKalkulacka.IsVisible )
+                    });
+            HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+            if (cenaKalkulacka.IsVisible)
             {
-                if( !backClicked )
+                if (!backClicked)
                 {
                     backClicked = true;
-                    entryNum.Text = entryNum.Text.Length > 0 ? entryNum.Text.Substring( 0, entryNum.Text.Length - 1 ) : string.Empty;
-                    if( !entryNum.Text.Contains( "," ) )
+                    entryNum.Text = entryNum.Text.Length > 0 ? entryNum.Text.Substring(0, entryNum.Text.Length - 1) : string.Empty;
+                    if (!entryNum.Text.Contains(","))
                     {
                         SetDecemal = false;
                     }
@@ -458,74 +474,75 @@ namespace MauiScanner
             }
             else
             {
-                idCardEntry.Text = idCardEntry.Text.Length > 0 ? idCardEntry.Text.Substring( 0, idCardEntry.Text.Length - 1 ) : string.Empty;
+                idCardEntry.Text = idCardEntry.Text.Length > 0 ? idCardEntry.Text.Substring(0, idCardEntry.Text.Length - 1) : string.Empty;
             }
         }
 
 
-        private void Keyboard_Decimal( object sender, EventArgs e )
+        private void Keyboard_Decimal(object sender, EventArgs e)
         {
 
-            HapticFeedback.Default.Perform( HapticFeedbackType.Click );
+            HapticFeedback.Default.Perform(HapticFeedbackType.Click);
             ImageButton button = (ImageButton)sender;
-            button.BackgroundColor = Color.FromHex( "#006da4" );
-            MainThread.BeginInvokeOnMainThread( async () =>
+            button.BackgroundColor = Color.FromHex("#006da4");
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Task.Delay( buttonTimer );
+                await Task.Delay(buttonTimer);
                 button.BackgroundColor = Colors.Green;
-            } );
-            if( IdCardLayour.IsVisible )
+            });
+            if (IdCardLayour.IsVisible)
             {
                 string checkedIdString = idCardEntry.Text;
-                if( checkedIdString.Length > 3 )
+                if (checkedIdString.Length > 3)
                 {
-                    if( checkedIdString.Length < 13 )
+                    if (checkedIdString.Length < 13)
                     {
-                        checkedIdString = checkedIdString.PadLeft( 13, '0' );
+                        checkedIdString = checkedIdString.PadLeft(13, '0');
                     }
-                    int checker = int.Parse( checkedIdString.Substring( 12, 1 ) );
-                    string toCheck = checkedIdString.Substring( 0, 12 );
+                    int checker = int.Parse(checkedIdString.Substring(12, 1));
+                    string toCheck = checkedIdString.Substring(0, 12);
                     checkNumber = toCheck;
                     List<int> evenPositions = new List<int>();//sudy
                     List<int> oddPositions = new List<int>();//lichy
-                    int even = 0; int odd = 0;
-                    for( int i = 0; i < toCheck.Length; i++ )
+                    int even = 0;
+                    int odd = 0;
+                    for (int i = 0;i < toCheck.Length;i++)
                     {
                         // Pozice jsou indexovány od 0, takže sudé pozice jsou na lichých indexech
-                        if( i % 2 == 0 )
+                        if (i % 2 == 0)
                         {
-                            oddPositions.Add( int.Parse( toCheck[ i ].ToString() ) );
+                            oddPositions.Add(int.Parse(toCheck[i].ToString()));
                         }
                         else
                         {
-                            evenPositions.Add( int.Parse( toCheck[ i ].ToString() ) );
+                            evenPositions.Add(int.Parse(toCheck[i].ToString()));
                         }
                     }
-                    foreach( var item in evenPositions )
+                    foreach (var item in evenPositions)
                     {
                         even = even + item;
                     }
                     even = even * 3;
-                    foreach( var item in oddPositions )
+                    foreach (var item in oddPositions)
                     {
                         odd = odd + item;
                     }
-                    if( 10 - ( ( even + odd ) % 10 ) == checker )
+                    if (10 - ((even + odd) % 10) == checker)
                     {
-                        CheckCard( checkedIdString );
+                        CheckCard(checkedIdString);
                     }
                     else
                     {
-                        CheckCard( idCardEntry.Text );
+                        CheckCard(idCardEntry.Text);
                     }
                 }
             }
             else
             {
                 string symbol = ",";
-                if( !entryNum.Text.Contains( symbol ) )
+                if (!entryNum.Text.Contains(symbol))
                 {
-                    if( entryNum.Text.Length == 0 )
+                    if (entryNum.Text.Length == 0)
                     {
                         entryNum.Text = "0";
                     }
@@ -558,10 +575,10 @@ namespace MauiScanner
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ResetButton( object sender, EventArgs e )
+        private void ResetButton(object sender, EventArgs e)
         {
 
-            HapticFeedback.Default.Perform( HapticFeedbackType.Click );
+            HapticFeedback.Default.Perform(HapticFeedbackType.Click);
             CardId = "";
             visiblePlatnost.IsVisible = false;
             visiblePlatnost.IsVisible = false;
@@ -581,30 +598,30 @@ namespace MauiScanner
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ColectionViewSales_SelectionChanged( object sender, SelectionChangedEventArgs e )
+        private void ColectionViewSales_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-            var added = e.CurrentSelection.Except( e.PreviousSelection ).ToList();
-            var removed = e.PreviousSelection.Except( e.CurrentSelection ).ToList();
+            var added = e.CurrentSelection.Except(e.PreviousSelection).ToList();
+            var removed = e.PreviousSelection.Except(e.CurrentSelection).ToList();
 
-            if( removed.Count == 0 )
+            if (removed.Count == 0)
             {
-                foreach( ResponseSaleClass item in added )
+                foreach (ResponseSaleClass item in added)
                 {
-                    if( item.Status != "error" )
+                    if (item.Status != "error")
                     {
 
-                        KeysListonary.Add( item.Key );
+                        KeysListonary.Add(item.Key);
                     }
                 }
             }
             else
             {
-                foreach( ResponseSaleClass item in removed )
+                foreach (ResponseSaleClass item in removed)
                 {
-                    if( item.Status != "error" )
+                    if (item.Status != "error")
                     {
-                        KeysListonary.Remove( item.Key );
+                        KeysListonary.Remove(item.Key);
                     }
                 }
 
@@ -616,7 +633,7 @@ namespace MauiScanner
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ManualyAddCardId( object sender, EventArgs e )
+        private void ManualyAddCardId(object sender, EventArgs e)
         {
             maunalyButton.IsVisible = false;
             idCardEntry.Text = string.Empty;
@@ -632,11 +649,11 @@ namespace MauiScanner
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void LogOut_Clicked( object sender, EventArgs e )
+        private async void LogOut_Clicked(object sender, EventArgs e)
         {
             try
             {
-                
+
                 if (await _loginClass.LogOut())
                 {
                     try
@@ -657,12 +674,12 @@ namespace MauiScanner
                     }
                 }
             }
-            catch( Exception )
+            catch (Exception)
             {
             }
         }
 
-        private void imageTitle_SizeChanged( object sender, EventArgs e )
+        private void imageTitle_SizeChanged(object sender, EventArgs e)
         {
             Image image = (Image)sender;
             tittleGrid.HeightRequest = image.Height;

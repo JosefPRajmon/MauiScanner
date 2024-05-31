@@ -20,6 +20,7 @@
             Spacing="0">
                 <cv:CameraView x:Name="cameraView" HeightRequest="100" WidthRequest="400" HorizontalOptions="FillAndExpand" CamerasLoaded="cameraView_CamerasLoaded" BarCodeDetectionEnabled="True" BarcodeDetected="cameraView_BarcodeDetected"/>
                 <StackLayout x:Name="visiblePlatnost" IsVisible="False" Padding="10">
+                    <StackLayout x:Name="visibleColor"></StackLayout>
                     <Border Padding="1" x:Name="backgraundPlatnost" WidthRequest="300" HorizontalOptions="CenterAndExpand"  BackgroundColor="#B3FFFFFF" StrokeThickness="0">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="8" />
