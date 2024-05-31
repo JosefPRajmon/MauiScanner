@@ -240,7 +240,7 @@ public partial class LoginPage : ContentPage
                         {
                             _loginClass.LogOut();
                             login.IsVisible = true;
-                            test.Text = "Nemáte přiřazenou žádnou společnost, Odhlášili jsme váš.";
+                            test.Text = Application.Current.Resources["ZeroCompany"].ToString();
                             return;
                         }
                         CompanyStack.IsVisible = true;

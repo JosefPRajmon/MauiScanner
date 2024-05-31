@@ -15,4 +15,5 @@ narozen/a roku: {2}</x:String>
  Id karty: {1}
     </x:String>
     <x:String x:Key="LoginFail">Nepovedlo se přihlásit</x:String>
+    <x:String x:Key="ZeroCompany">Nemáte přiřazenu žádnou společnost. Odhlásili jsme vás.</x:String>
 </ResourceDictionary>
