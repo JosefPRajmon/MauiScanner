@@ -15,11 +15,10 @@
             VerticalOptions="FillAndExpand"
             Padding="30,30"
             Spacing="25">
-                <Entry x:Name="username" Placeholder="Uživatelské jméno"/>
-                <Entry x:Name="password" Placeholder="Heslo" IsPassword="true" 
-                       
-                       />
-                <Button x:Name="log" Text="Přihlásit" Clicked="log_Clicked"  BackgroundColor="#006da4" BorderColor="#006da4"/>
+                <Entry x:Name="username" Placeholder="Uživatelské jméno" TextColor="Black"/>
+                <Entry x:Name="password" Placeholder="Heslo" IsPassword="true" TextColor="Black"/>
+                
+                <Button x:Name="log" Text="Přihlásit" Clicked="log_Clicked" TextColor="White" BackgroundColor="#006da4" BorderColor="#006da4"/>
                 <Label x:Name="test" TextColor="Red"/>
             </StackLayout>
             <CollectionView x:Name="AllUsers" Grid.Row="1" SelectionMode="Single" SelectionChanged="AllUsers_SelectionChanged" IsVisible="False">
@@ -51,7 +50,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
             <StackLayout x:Name="CompanyStack" IsVisible="False" Grid.RowSpan="2">
-                <Label x:Name="tittleDown" Margin="10" Text="Vyberte společnost:"/>
+                <Label x:Name="tittleDown" Margin="10" Text="Vyberte společnost:" TextColor="Black"/>
                 <CollectionView x:Name="Companies" IsVisible="true" SelectionMode="Single" SelectionChanged="Companies_SelectionChanged" MinimumHeightRequest="30">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -67,13 +66,13 @@
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <Label Text="{Binding Name}" x:Name="LabelCompany" Margin="10" InputTransparent="True"/>
+                                <Label Text="{Binding Name}" x:Name="LabelCompany" Margin="10" InputTransparent="True" TextColor="Black"/>
                             </Frame >
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <Label x:Name="tittleWorkshopDown" Margin="10" Text="Vyberte provozovnu:" IsVisible="False"/>
+                <Label x:Name="tittleWorkshopDown" Margin="10" Text="Vyberte provozovnu:" IsVisible="False" TextColor="Black"/>
                 <CollectionView x:Name="Workshops" IsVisible="true" SelectionMode="Single" Margin="5" SelectionChanged="Selectworkshop">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -89,14 +88,14 @@
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <Label Text="{Binding .}" x:Name="LabelWorkShop" Margin="10" InputTransparent="True"/>
+                                <Label Text="{Binding .}" x:Name="LabelWorkShop" Margin="10" InputTransparent="True" TextColor="Black"/>
                             </Frame >
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
 
                 </CollectionView>
                 <Label x:Name="errorSelect" TextColor="red" HorizontalTextAlignment="Center"/>
-                <Button x:Name="ButtonSelecter" Clicked="Button_Clicked" Text="Zvolit" Margin="10" IsVisible="False" BackgroundColor="Green" BorderColor="Green"/>
+                <Button x:Name="ButtonSelecter" Clicked="Button_Clicked" Text="Zvolit" Margin="10" IsVisible="False" BackgroundColor="Green" BorderColor="Green" TextColor="White"/>
 
             </StackLayout>
         </Grid>

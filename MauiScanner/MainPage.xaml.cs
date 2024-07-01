@@ -276,10 +276,22 @@ namespace MauiScanner
             string responseSales = "";
             foreach (var item in KeysListonary)
             {
-                //TODO Přidatstacklayout na řádek 24 v xamlu a dodelat tady přidání stacklayoutu do něj rada vloz do frame stacklayout a do nej label a kde nepotřebujes jinak dej colors transparent pokud je sale.ErrorNo ==0 tak vybarvit zelene jinak vybarvit pozadí červene
+                // Reset responseSales pro každou iteraci
+                responseSales = "";
+
                 ResponseSaleClass sale = result.Sales[item];
                 responseSales += string.Format("{0}: <br>{1}", sale.SaleName, sale.InfoText);
-                Frame ResultFrame = new Frame { Content = new Label { Text = responseSales, TextColor = Colors.White, TextType = TextType.Html, BackgroundColor = Colors.Transparent }  };
+                Frame ResultFrame = new Frame
+                {
+                    Content = new Label
+                    {
+                        Text = responseSales,
+                        TextColor = Colors.White,
+                        TextType = TextType.Html,
+                        BackgroundColor = Colors.Transparent
+                    }
+                };
+
                 if (sale.ErrorNo == 0)
                 {
                     ResultFrame.BackgroundColor = Colors.Green;
@@ -288,7 +300,6 @@ namespace MauiScanner
                 {
                     ResultFrame.BackgroundColor = Colors.Red;
                 }
-                // Přidat do visibleColor ResultFrame
                 visibleColor.Children.Add(ResultFrame);
             }
             backgraundPlatnost.IsVisible = false;
