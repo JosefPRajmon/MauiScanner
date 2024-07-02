@@ -99,7 +99,9 @@ namespace MauiScanner
                 if (!open)
                 {
                     open = true;
-                    visibleColor.Children.Clear();
+                    MainThread.BeginInvokeOnMainThread(() => {
+                        visibleColor.Children.Clear();
+                    });
                     backgraundPlatnost.IsVisible = true;
                     Task.Run(() =>
                     {
@@ -306,8 +308,12 @@ namespace MauiScanner
             //responseSales = responseSales.Substring(0, responseSales.LastIndexOf("<br><br>"));
             //responseSales = responseSales.Replace("<br>", "\n");
 
-            cartInfo.Text = responseSales;
-            cartInfo.TextColor = Color.FromHex("#B3FFFFFF");
+            //cartInfo.Text = responseSales;
+            //cartInfo.TextColor = Color.FromHex("#B3FFFFFF"); //Potential culprit
+            cartInfo.Text = string.Empty;
+            backgraundPlatnost.BackgroundColor = Colors.Transparent;
+
+
             //backgraundPlatnost.BackgroundColor = Color.FromHex("#006da4");
             maunalyButton.IsVisible = false;//true
             Kalkulacka.IsVisible = true;
