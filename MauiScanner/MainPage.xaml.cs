@@ -128,10 +128,18 @@ namespace MauiScanner
                             try
                             {
                                 HttpResponseMessage scannedResponseClassResponse = await onlineCheckClass.CheckSale(await _loginClass.GetUserID(), cardId);
+
+                                // Přidání logování JSON odpovědi
+                                string jsonResponse = await scannedResponseClassResponse.Content.ReadAsStringAsync();
+                                Console.WriteLine("JSON odpověď od serveru: " + jsonResponse);
+
                                 scannedResponseClass = await scannedResponseClassResponse.Content.ReadFromJsonAsync<ScannedResponseClass>();
                             }
                             catch (Exception e)
                             {
+                                // Zpracování výjimky
+                                Console.WriteLine("Chyba při získávání odpovědi od serveru: " + e.Message);
+
                                 Application.Current.MainPage = new NavigationPage(new LoginPage(_loginClass));
                                 Navigation.PopToRootAsync();
                                 return;
@@ -145,22 +153,32 @@ namespace MauiScanner
                             {
                                 App.Current.Resources.TryGetValue("CartInfoOkFormated", out object cartInfoText);
                                 cartInfo.Text = string.Format(/*"Id karty: {0}<br>Držitel: {1}<br>Sarozen/a roku: {2}"*/(string)cartInfoText, /*card.HolderID*/CardId + checkNumber, card.HolderName, card.HolderYearBirth);
-                                //cartInfo.TextType= TextType.Text;
-                                ColectionViewSales.IsVisible = true;
-                                foreach (var item in scannedResponseClass.Sales.Keys)
+                                if (scannedResponseClass.Sales == null)
                                 {
-                                    scannedResponseClass.Sales[item].Key = item;
+                                    backgraundPlatnost.BackgroundColor = Colors.Green;
+                                    cartInfo.Text = "Karta je platná!\nNení k dispozici žádná sleva!\n" + cartInfo.Text;
                                 }
-                                ColectionViewSales.ItemsSource = scannedResponseClass.Sales.Values;
-                                Butt.IsVisible = true;
-                                backgraundPlatnost.BackgroundColor = Colors.Green;
-                                Kalkulacka.IsVisible = false;
-                                idCardEntry.Text = string.Empty;
-                                cartInfo.TextColor = Colors.White;
-                                maunalyButton.IsVisible = false;
+                                else
+                                {
+                                    //cartInfo.TextType= TextType.Text;
+                                    ColectionViewSales.IsVisible = true;
+                                    foreach (var item in scannedResponseClass.Sales.Keys)
+                                    {
+                                        scannedResponseClass.Sales[item].Key = item;
+                                    }
+                                    ColectionViewSales.ItemsSource = scannedResponseClass.Sales.Values;
+                                    Butt.IsVisible = true;
+                                    backgraundPlatnost.BackgroundColor = Colors.Green;
+                                    Kalkulacka.IsVisible = false;
+                                    idCardEntry.Text = string.Empty;
+                                    cartInfo.TextColor = Colors.White;
+                                    maunalyButton.IsVisible = false;
+                                }
+                                
                             }
                             else if (scannedResponseClass.Status == "Error")
                             {
+                                backgraundPlatnost.BackgroundColor = Colors.Gray;
                                 cartInfo.Text = "Znovu se přihlašuji.\nPočkejte prosím.";
                                 bool reLoged = await _loginClass.ReLogin();
                                 if (reLoged)
@@ -176,7 +194,15 @@ namespace MauiScanner
                                 cartInfo.Text = string.Format((string)cartInfoErrorFormated, scannedResponseClass.Infotext, cardId + checkNumber);
                                 ColectionViewSales.IsVisible = false;
                                 cartInfo.TextColor = Colors.White;
-                                backgraundPlatnost.BackgroundColor = Colors.Red;
+                                if (scannedResponseClass.ErrorNo == 2)
+                                {
+                                    backgraundPlatnost.BackgroundColor = Colors.Green;
+                                    cartInfo.Text = "Karta je platná!\n" + cartInfo.Text;
+                                }
+                                else
+                                {
+                                    backgraundPlatnost.BackgroundColor = Colors.Red;
+                                }
                                 Butt.IsVisible = false;
                                 entryNum.IsVisible = false;
                                 cena.IsVisible = false;
