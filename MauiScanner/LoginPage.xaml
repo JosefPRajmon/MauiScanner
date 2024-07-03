@@ -17,7 +17,7 @@
             Spacing="25">
                 <Entry x:Name="username" Placeholder="Uživatelské jméno" TextColor="Black"/>
                 <Entry x:Name="password" Placeholder="Heslo" IsPassword="true" TextColor="Black"/>
-                
+
                 <Button x:Name="log" Text="Přihlásit" Clicked="log_Clicked" TextColor="White" BackgroundColor="#006da4" BorderColor="#006da4"/>
                 <Label x:Name="test" TextColor="Red"/>
             </StackLayout>
@@ -97,7 +97,7 @@
                 <Label x:Name="errorSelect" TextColor="red" HorizontalTextAlignment="Center"/>
                 <Button x:Name="ButtonSelecter" Clicked="Button_Clicked" Text="Zvolit" Margin="10" IsVisible="False" BackgroundColor="Green" BorderColor="Green" TextColor="White"/>
 
-            </StackLayout>
+             </StackLayout>
         </Grid>
     </StackLayout>
 </ContentPage>

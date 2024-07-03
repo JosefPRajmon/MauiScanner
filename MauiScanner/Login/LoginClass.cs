@@ -36,6 +36,22 @@ namespace MauiScanner.Login
 
         }
 
+        public async Task<bool> ChangeWork()
+        {
+            try
+            {
+                UserClass user = await GetUser();
+                user.Workshop = string.Empty;
+                user.Companie = string.Empty;
+                await Update(user);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public async Task<List<string>> Login( string username, string password )
         {
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;

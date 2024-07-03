@@ -7,12 +7,13 @@
     
     <ScrollView Margin="0" Padding="0">
         <VerticalStackLayout BackgroundColor="#e1eef4" Margin="0" Padding="0">
-            <Grid Margin="0" Padding="0" ColumnDefinitions="*,40" RowSpacing="0" ColumnSpacing="0" HorizontalOptions="FillAndExpand" x:Name="tittleGrid">
-                <Image Grid.ColumnSpan="2" Margin="0" VerticalOptions="Start"
-                Source="bilina_header_cteni_sm.png"
-                Aspect="AspectFit"
-                SemanticProperties.Description="logo Bíliny" x:Name="imageTitle" SizeChanged="imageTitle_SizeChanged" />
-                <ImageButton Grid.Column="1" VerticalOptions="Center" Source="odhlaseni.png" WidthRequest="20" Clicked="LogOut_Clicked"/>
+            <Grid Margin="0" Padding="0" ColumnDefinitions="*,Auto,40" RowSpacing="0" ColumnSpacing="0" HorizontalOptions="FillAndExpand" x:Name="tittleGrid">
+                <Image Grid.ColumnSpan="3" Margin="0" VerticalOptions="Start"
+                    Source="bilina_header_cteni_sm.png"
+                    Aspect="AspectFit"
+                    SemanticProperties.Description="logo Bíliny" x:Name="imageTitle" SizeChanged="imageTitle_SizeChanged" />
+                <Button Text="Změnit provozovnu" Grid.Column="1" VerticalOptions="Center" Clicked="backToJobsClicked" BackgroundColor="#04548c" TextColor="White"/>
+                <ImageButton Grid.Column="2" VerticalOptions="Center" Source="odhlaseni.png" WidthRequest="20" Clicked="LogOut_Clicked"/>
             </Grid>
 
             <StackLayout 
@@ -75,9 +76,9 @@
                             <Label  Grid.Row="1" Grid.Column="1" x:Name="cena" HorizontalTextAlignment="Start" IsVisible="False" TextColor="#006c00" FontAttributes="Bold"/>
                         </Grid>
                     </VerticalStackLayout>
-                    <VerticalStackLayout x:Name="IdCardLayour">
+                    <VerticalStackLayout x:Name="IdCardLayour" Padding="10,10">
                         <Grid  ColumnDefinitions="*,*" RowDefinitions="20">
-                            <Label Text="Zadat kod ručně: " Grid.Column="0" TextColor="Black"/>
+                            <Label Text="Zadat kód ručně: " Grid.Column="0" TextColor="Black"/>
                             <Label x:Name="idCardEntry" Text="" Grid.Column="1" TextColor="DarkGray"/>
                         </Grid>
                     </VerticalStackLayout>

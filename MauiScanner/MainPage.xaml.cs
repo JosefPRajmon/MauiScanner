@@ -727,5 +727,36 @@ namespace MauiScanner
             Image image = (Image)sender;
             tittleGrid.HeightRequest = image.Height;
         }
+
+        private async void backToJobsClicked(object sender, EventArgs e)
+        {
+            try
+            {
+
+                if (await _loginClass.ChangeWork())
+                {
+                    try
+                    {
+                        Application.Current.MainPage = new NavigationPage(new LoginPage(_loginClass));
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                    try
+                    {
+                        Navigation.PopToRootAsync();
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
     }
 }
