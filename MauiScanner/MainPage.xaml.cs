@@ -276,6 +276,7 @@ namespace MauiScanner
         /// <param name="e"></param>
         private async void Use_Sale(object sender, EventArgs e)
         {
+            Butt.IsVisible = false;
             HapticFeedback.Default.Perform(HapticFeedbackType.Click);
             KeysDictonary = "";
             foreach (var item in KeysListonary)
@@ -295,7 +296,7 @@ namespace MauiScanner
 
             HttpResponseMessage scannedResponseClassResponse = await onlineCheckClass.UseSale(await _loginClass.GetUserID(), CardId, KeysDictonary);
             ScannedResponseClass result = await scannedResponseClassResponse.Content.ReadFromJsonAsync<ScannedResponseClass>();
-            Butt.IsVisible = false;
+            
             entryNum.Text = string.Empty;
             entryNum.IsVisible = false;
             cena.IsVisible = false;
@@ -410,11 +411,9 @@ namespace MauiScanner
         public void EditIdCart(int value, Button button)
         {
             HapticFeedback.Default.Perform(HapticFeedbackType.Click);
-            button.BackgroundColor = Color.FromHex("#006da4");
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await Task.Delay(buttonTimer);
-                button.BackgroundColor = Colors.Gray;
             });
             if (cenaKalkulacka.IsVisible)
             {
@@ -492,11 +491,9 @@ namespace MauiScanner
         private void Keyboard_back(object sender, EventArgs e)
         {
             Button button = (Button)sender;
-            button.BackgroundColor = Color.FromHex("#006da4");
             MainThread.BeginInvokeOnMainThread(async () =>
                     {
                         await Task.Delay(buttonTimer);
-                        button.BackgroundColor = Colors.Gray;
                     });
             HapticFeedback.Default.Perform(HapticFeedbackType.Click);
             if (cenaKalkulacka.IsVisible)

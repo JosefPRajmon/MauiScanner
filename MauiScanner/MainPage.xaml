@@ -4,15 +4,28 @@
              xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
              xmlns:local="clr-namespace:MauiScanner"
              x:Class="MauiScanner.MainPage">
-    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="NumericButtonStyle" TargetType="Button">
+                <Setter Property="WidthRequest" Value="60"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=White, Dark=#393939}"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Light=#04548c, Dark=#048CEC}"/>
+                <Setter Property="BorderColor" Value="{AppThemeBinding Light=#04548c, Dark=#048CEC}"/>
+                <Setter Property="BorderWidth" Value="0.5"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
     <ScrollView Margin="0" Padding="0">
-        <VerticalStackLayout BackgroundColor="#e1eef4" Margin="0" Padding="0">
+        <VerticalStackLayout BackgroundColor="{AppThemeBinding Light=#e1eef4, Dark=Black}" Margin="0" Padding="0">
             <Grid Margin="0" Padding="0" ColumnDefinitions="*,Auto,40" RowSpacing="0" ColumnSpacing="0" HorizontalOptions="FillAndExpand" x:Name="tittleGrid">
                 <Image Grid.ColumnSpan="3" Margin="0" VerticalOptions="Start"
                     Source="bilina_header_cteni_sm.png"
                     Aspect="AspectFit"
                     SemanticProperties.Description="logo Bíliny" x:Name="imageTitle" SizeChanged="imageTitle_SizeChanged" />
-                <Button Text="Změnit provozovnu" Grid.Column="1" VerticalOptions="Center" Clicked="backToJobsClicked" BackgroundColor="#04548c" TextColor="White"/>
+                <Button Text="Změnit provozovnu" Grid.Column="1" VerticalOptions="Center" Clicked="backToJobsClicked" BackgroundColor="#04548c" TextColor="White" BorderColor="White" BorderWidth="0.5"/>
                 <ImageButton Grid.Column="2" VerticalOptions="Center" Source="odhlaseni.png" WidthRequest="20" Clicked="LogOut_Clicked"/>
             </Grid>
 
@@ -20,7 +33,9 @@
             VerticalOptions="FillAndExpand"
             Padding="30,30"
             Spacing="0">
-                <cv:CameraView x:Name="cameraView" HeightRequest="100" WidthRequest="400" HorizontalOptions="FillAndExpand" CamerasLoaded="cameraView_CamerasLoaded" BarCodeDetectionEnabled="True" BarcodeDetected="cameraView_BarcodeDetected"/>
+                <Border BackgroundColor="Transparent" Stroke="Gray" StrokeThickness="0.5">
+                    <cv:CameraView x:Name="cameraView" HeightRequest="100" WidthRequest="400" HorizontalOptions="FillAndExpand" CamerasLoaded="cameraView_CamerasLoaded" BarCodeDetectionEnabled="True" BarcodeDetected="cameraView_BarcodeDetected"/>
+                </Border>
                 <StackLayout x:Name="visiblePlatnost" IsVisible="False" Padding="10">
                     <StackLayout x:Name="visibleColor" Spacing="5"></StackLayout>
                     <Border Padding="1" x:Name="backgraundPlatnost" WidthRequest="300" HorizontalOptions="CenterAndExpand"  BackgroundColor="#B3FFFFFF" StrokeThickness="0">
@@ -28,7 +43,7 @@
                             <RoundRectangle CornerRadius="8" />
                         </Border.StrokeShape>
 
-                        <Label x:Name="cartInfo" TextType="Text" HorizontalTextAlignment="Center" Margin="10"  FontFamily="OpenSans-Bold"/>
+                        <Label x:Name="cartInfo" TextType="Text" HorizontalTextAlignment="Center" Margin="10" TextColor="White" FontFamily="OpenSans-Bold"/>
                     </Border>
                 </StackLayout>
                 <CollectionView x:Name="ColectionViewSales" SelectionMode="Multiple" SelectionChanged="ColectionViewSales_SelectionChanged"> 
@@ -78,33 +93,33 @@
                     </VerticalStackLayout>
                     <VerticalStackLayout x:Name="IdCardLayour" Padding="10,10">
                         <Grid  ColumnDefinitions="*,*" RowDefinitions="20">
-                            <Label Text="Zadat kód ručně: " Grid.Column="0" TextColor="Black"/>
-                            <Label x:Name="idCardEntry" Text="" Grid.Column="1" TextColor="DarkGray"/>
+                            <Label Text="Zadat kód ručně: " Grid.Column="0" TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                            <Label x:Name="idCardEntry" Text="" Grid.Column="1" TextColor="{AppThemeBinding Light=#04548c, Dark=#048CEC}"/>
                         </Grid>
                     </VerticalStackLayout>
                     
                     <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0">
-                        <Button WidthRequest="60" Margin="5" Text="1" Clicked="Keyboard_1" BackgroundColor="gray" TextColor="White"/>
-                        <Button WidthRequest="60" Margin="5" Text="2" Clicked="Keyboard_2" BackgroundColor="gray" TextColor="White"/>
-                        <Button WidthRequest="60" Margin="5" Text="3" Clicked="Keyboard_3" BackgroundColor="gray" TextColor="White"/>
+                        <Button Text="1" Clicked="Keyboard_1" Style="{StaticResource NumericButtonStyle}"/>
+                        <Button Text="2" Clicked="Keyboard_2" Style="{StaticResource NumericButtonStyle}"/>
+                        <Button Text="3" Clicked="Keyboard_3" Style="{StaticResource NumericButtonStyle}"/>
                     </HorizontalStackLayout>
                     
                     <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0" >
-                        <Button WidthRequest="60" Margin="5" Text="4" Clicked="Keyboard_4" BackgroundColor="gray" TextColor="White"/>
-                        <Button WidthRequest="60" Margin="5" Text="5" Clicked="Keyboard_5" BackgroundColor="gray" TextColor="White"/>
-                        <Button WidthRequest="60" Margin="5" Text="6" Clicked="Keyboard_6" BackgroundColor="gray" TextColor="White"/>
+                        <Button Text="4" Clicked="Keyboard_4" Style="{StaticResource NumericButtonStyle}"/>
+                        <Button Text="5" Clicked="Keyboard_5" Style="{StaticResource NumericButtonStyle}"/>
+                        <Button Text="6" Clicked="Keyboard_6" Style="{StaticResource NumericButtonStyle}"/>
                     </HorizontalStackLayout>
                     
                     <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0" >
-                        <Button WidthRequest="60" Margin="5" Text="7" Clicked="Keyboard_7" BackgroundColor="gray" TextColor="White"/>
-                        <Button WidthRequest="60" Margin="5" Text="8" Clicked="Keyboard_8" BackgroundColor="gray" TextColor="White"/>
-                        <Button WidthRequest="60" Margin="5" Text="9" Clicked="Keyboard_9" BackgroundColor="gray" TextColor="White"/>
+                        <Button Text="7" Clicked="Keyboard_7" Style="{StaticResource NumericButtonStyle}"/>
+                        <Button Text="8" Clicked="Keyboard_8" Style="{StaticResource NumericButtonStyle}"/>
+                        <Button Text="9" Clicked="Keyboard_9" Style="{StaticResource NumericButtonStyle}"/>
                     </HorizontalStackLayout>
                     
                     <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Margin="0">
-                        <Button WidthRequest="60" x:Name="button0" Margin="5" Text="0" Clicked="Keyboard_0" BackgroundColor="gray" TextColor="White"/>
+                        <Button x:Name="button0" Text="0" Clicked="Keyboard_0" Style="{StaticResource NumericButtonStyle}"/>
                         <ImageButton CornerRadius="10" Padding="10" MaximumHeightRequest="50" Source="send_icon.png" WidthRequest="60" HeightRequest="40" Margin="5" x:Name="decimalOrSend"  Clicked="Keyboard_Decimal" BackgroundColor="Green"/>
-                        <Button WidthRequest="60" Margin="5" Text="←" Clicked="Keyboard_back" BackgroundColor="gray" TextColor="White"/>
+                        <Button Text="←" Clicked="Keyboard_back" Style="{StaticResource NumericButtonStyle}"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
                 <VerticalStackLayout x:Name="Butt" IsVisible="False">

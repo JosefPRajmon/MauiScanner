@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:MauiScanner"
              HideSoftInputOnTapped="true"
              Title="LoginPage">
-    <StackLayout BackgroundColor="#e1eef4">
+    <StackLayout BackgroundColor="{AppThemeBinding Light=#e1eef4, Dark=#121212}">
         <Image
                 Source="bilina_header_cteni_sm.png"
                 Aspect="AspectFit"
@@ -15,8 +15,8 @@
             VerticalOptions="FillAndExpand"
             Padding="30,30"
             Spacing="25">
-                <Entry x:Name="username" Placeholder="Uživatelské jméno" TextColor="Black"/>
-                <Entry x:Name="password" Placeholder="Heslo" IsPassword="true" TextColor="Black"/>
+                <Entry x:Name="username" Placeholder="Uživatelské jméno" TextColor="{AppThemeBinding Light=Black, Dark=White}" PlaceholderColor="{AppThemeBinding Light=#A7A7A7, Dark=#A0A0A0}"/>
+                <Entry x:Name="password" Placeholder="Heslo" IsPassword="true" TextColor="{AppThemeBinding Light=Black, Dark=White}" PlaceholderColor="{AppThemeBinding Light=#A7A7A7, Dark=#A0A0A0}"/>
 
                 <Button x:Name="log" Text="Přihlásit" Clicked="log_Clicked" TextColor="White" BackgroundColor="#006da4" BorderColor="#006da4"/>
                 <Label x:Name="test" TextColor="Red"/>
@@ -50,11 +50,11 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
             <StackLayout x:Name="CompanyStack" IsVisible="False" Grid.RowSpan="2">
-                <Label x:Name="tittleDown" Margin="10" Text="Vyberte společnost:" TextColor="Black"/>
+                <Label x:Name="tittleDown" Margin="10" Text="Vyberte společnost:" TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
                 <CollectionView x:Name="Companies" IsVisible="true" SelectionMode="Single" SelectionChanged="Companies_SelectionChanged" MinimumHeightRequest="30">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Margin="5" Padding="5"  BackgroundColor="white" InputTransparent="True">
+                            <Frame Margin="5" Padding="5"  BackgroundColor="{AppThemeBinding Light=White, Dark=#4D4D4D}" InputTransparent="True">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup x:Name="CommonStates">
                                         <VisualState x:Name="Normal" />
@@ -66,17 +66,17 @@
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <Label Text="{Binding Name}" x:Name="LabelCompany" Margin="10" InputTransparent="True" TextColor="Black"/>
+                                <Label Text="{Binding Name}" x:Name="LabelCompany" Margin="10" InputTransparent="True" TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
                             </Frame >
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <Label x:Name="tittleWorkshopDown" Margin="10" Text="Vyberte provozovnu:" IsVisible="False" TextColor="Black"/>
+                <Label x:Name="tittleWorkshopDown" Margin="10" Text="Vyberte provozovnu:" IsVisible="False" TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
                 <CollectionView x:Name="Workshops" IsVisible="true" SelectionMode="Single" Margin="5" SelectionChanged="Selectworkshop">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Frame Margin="5" Padding="5"  BackgroundColor="white" InputTransparent="True">
+                            <Frame Margin="5" Padding="5"  BackgroundColor="{AppThemeBinding Light=White, Dark=#4D4D4D}" InputTransparent="True">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup x:Name="CommonStates">
                                         <VisualState x:Name="Normal" />
@@ -88,7 +88,7 @@
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <Label Text="{Binding .}" x:Name="LabelWorkShop" Margin="10" InputTransparent="True" TextColor="Black"/>
+                                <Label Text="{Binding .}" x:Name="LabelWorkShop" Margin="10" InputTransparent="True" TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
                             </Frame >
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
