@@ -103,6 +103,7 @@
 	  <None Remove="Resources\Images\decimal_icon.png" />
 	  <None Remove="Resources\Images\odhlaseni.svg" />
 	  <None Remove="Resources\Images\send_icon.png" />
+	  <None Remove="Resources\Images\user.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
