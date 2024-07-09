@@ -101,6 +101,7 @@ namespace MauiScanner
                     open = true;
                     MainThread.BeginInvokeOnMainThread(() => {
                         visibleColor.Children.Clear();
+                        noSale.IsVisible = false;
                     });
                     backgraundPlatnost.IsVisible = true;
                     Task.Run(() =>
@@ -152,11 +153,13 @@ namespace MauiScanner
                             if (scannedResponseClass.Status == "OK")
                             {
                                 App.Current.Resources.TryGetValue("CartInfoOkFormated", out object cartInfoText);
-                                cartInfo.Text = string.Format(/*"Id karty: {0}<br>Držitel: {1}<br>Sarozen/a roku: {2}"*/(string)cartInfoText, /*card.HolderID*/CardId + checkNumber, card.HolderName, card.HolderYearBirth);
+                                cartInfo.Text = string.Format(/*"Id karty: {0}<br>Držitel: {1}<br>Narozen/a roku: {2}"*/(string)cartInfoText, /*card.HolderID*/CardId + checkNumber, card.HolderName, card.HolderYearBirth);
                                 if (scannedResponseClass.Sales == null)
                                 {
                                     backgraundPlatnost.BackgroundColor = Colors.Green;
-                                    cartInfo.Text = "Karta je platná!\nNení k dispozici žádná sleva!\n" + cartInfo.Text;
+                                    cartInfo.Text = "Karta je platná!\n" + cartInfo.Text;
+                                    noSale.IsVisible = true;
+
                                 }
                                 else
                                 {

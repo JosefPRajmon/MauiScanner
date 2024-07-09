@@ -46,7 +46,11 @@
 
                         <Label x:Name="cartInfo" TextType="Text" HorizontalTextAlignment="Center" Margin="10" TextColor="White" FontFamily="OpenSans-Bold"/>
                     </Border>
+                    
                 </StackLayout>
+                <Frame x:Name="noSale" IsVisible="False" Padding="1" BackgroundColor="{AppThemeBinding Light=LightGray, Dark=#393939}" BorderColor="{AppThemeBinding Light=Gray, Dark=Gray}">
+                    <Label Margin="10" TextType="Text" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light=Black, Dark=White}" Text="Není k dispozici žádná sleva."/>
+                </Frame>
                 <CollectionView x:Name="ColectionViewSales" SelectionMode="Multiple" SelectionChanged="ColectionViewSales_SelectionChanged"> 
                     <CollectionView.Resources>
                         <ResourceDictionary>

@@ -4,16 +4,16 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <x:String x:Key="InternetOut">Není připojení k internetu. Prosíme zkontrolujte ho.</x:String>
+    <x:String x:Key="InternetOut">Nelze se připojit k internetu. Prosíme zkontrolujte své připojení.</x:String>
     <x:String x:Key="ServerOut">Nepovedlo se připojit k serveru.</x:String>
     <x:String x:Key="ServerDisconect">Selhala komunikace se serverem.</x:String>
-    <x:String x:Key="ZeroSale">Pokud chcete uplatnit slevu tak jí vyberte.</x:String>
+    <x:String x:Key="ZeroSale">Chcete-li uplatnit slevu, je třeba ji vybrat.</x:String>
     <x:String x:Key="CartInfoOkFormated">Id karty: {0} 
 Držitel: {1}
-narozen/a roku: {2}</x:String>
+Narozen/a roku: {2}</x:String>
     <x:String x:Key="CartInfoErrorFormated">{0}
  Id karty: {1}
     </x:String>
-    <x:String x:Key="LoginFail">Nepovedlo se přihlásit</x:String>
+    <x:String x:Key="LoginFail">Nepovedlo se přihlásit.</x:String>
     <x:String x:Key="ZeroCompany">Nemáte přiřazenu žádnou společnost. Odhlásili jsme vás.</x:String>
 </ResourceDictionary>

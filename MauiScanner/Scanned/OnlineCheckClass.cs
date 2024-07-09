@@ -26,8 +26,9 @@ namespace MauiScanner.Scanned
                 {
                     LoginClass loginClass = new LoginClass();
                     UserClass user = await loginClass.GetUser();
+                    //string url = string.Format("https://karta-bilina.as4u.cz/redakce/json.php?akce=sale&subakce={0}&xuser={1}&card_numberFind={2}&companiesID={3}&establishmentsID={4}", subakce, userID, cardNumber, user.Companie, user.Workshop);
                     string url = string.Format("https://karta.bilina.cz/redakce/json.php?akce=sale&subakce={0}&xuser={1}&card_numberFind={2}&companiesID={3}&establishmentsID={4}", subakce, userID, cardNumber, user.Companie, user.Workshop );
-                    if( usedSale != "-1" )
+                    if ( usedSale != "-1" )
                     {
                         url += $"&salesUsed={usedSale}";
                     }
